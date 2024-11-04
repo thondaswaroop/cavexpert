@@ -38,7 +38,7 @@ const ImageSlideArea: React.FC<ImageSlideAreaProps> = ({ images, isOffline, bann
   return (
     <View>
       <ImageSlider
-        data={displayImages.length > 0 ? displayImages : [{ img: 'https://pmgstechnology.com/projects/theManCave/images/logo.png' }]}
+        data={displayImages.length > 0 ? displayImages : [{ img: 'https://pmgstechnology.com/projects/caveXpert/images/logo.png' }]}
         autoPlay={true}
         timer={4000}
         onClick={(images, index) => clickImage(images, index)}
