@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Image, Animated, Alert, BackHandler,Share } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Image, Animated, Alert, BackHandler, Share, ImageBackground } from 'react-native';
 import { globalStyles, imagesBucket } from '../../Resources'; // Assuming you have global styles
 import { GlobalColors } from '../../styles/Colors';
 import { useFocusEffect } from '@react-navigation/native';
@@ -130,73 +130,121 @@ const QuizResultsScreen = ({ route, navigation }: any) => {
         }
     };
 
-    const shareResult = ()=>{
+    const shareResult = () => {
         socialShare(
             AppEnvironment.MainLogo,
-          '🚀 I just leveled up in "The Man Cave"! 🚀',
-          "I scored "+score+" points in the latest quiz about Attracting the Right Person! 📚💡With "+correctAnswers+" correct answers, I'm learning how to understand myself better and become the best version of me. 💪 \n\n Think you can beat my score? 🏆 Join me in The Man Cave and discover what it takes to attract the right people into your life and build real, lasting relationships. \n\n ❤️ Click the link to download the app and start your journey now: [https://play.google.com/store/apps/details?id=com.whatsapp] \n 📲 Download The Man Cave and challenge yourself today!",
-          AppEnvironment.StoreLink
+            '🚀 I just leveled up in "The Man Cave"! 🚀',
+            "I scored " + score + " points in the latest quiz about Attracting the Right Person! 📚💡With " + correctAnswers + " correct answers, I'm learning how to understand myself better and become the best version of me. 💪 \n\n Think you can beat my score? 🏆 Join me in The Man Cave and discover what it takes to attract the right people into your life and build real, lasting relationships. \n\n ❤️ Click the link to download the app and start your journey now: [https://play.google.com/store/apps/details?id=com.whatsapp] \n 📲 Download The Man Cave and challenge yourself today!",
+            AppEnvironment.StoreLink
         );
     }
 
     return (
-        <View style={globalStyles.mainContainer}>
-            <View style={[globalStyles.padding, globalStyles.mTop20]}>
-                <Text style={styles.heading}>Quiz Completed!</Text>
+        <ImageBackground
+            source={imagesBucket.backgroundImage}
+            style={globalStyles.mainImageBgContainer}
+            resizeMode="cover"
+        >
+            <View style={globalStyles.overlay}>
+                <View style={[globalStyles.padding, globalStyles.mTop20]}>
+                    <Text style={[styles.heading, globalStyles.mBottom20, globalStyles.mTop50]}>Quiz Completed!</Text>
+                    <View style={globalStyles.padding}>
+                        <View>
+                            <Text style={[globalStyles.themeTextColor, globalStyles.textCenter]}>
+                                YOUR SCORE
+                            </Text>
+                        </View>
+                        <View style={[globalStyles.flex, { marginTop: 10, paddingLeft: 50, paddingRight: 50 }]}>
+                            <View>
+                                <Text style={styles.resultText}>{correctAnswers}/{totalQuestions}</Text>
+                            </View>
+                            <View >
+                                <Text style={[styles.scoreText, globalStyles.mTop10]}>
+                                    🪙 +{score} Points
+                                </Text>
+                            </View>
+                        </View>
+                        {/* <View>
+                            <View style={styles.progressBarBackground}>
+                                <Animated.View
+                                    style={[
+                                        styles.progressBarFill,
+                                        { width: `${(correctAnswers / totalQuestions) * 100}%` },
+                                    ]}
+                                />
+                            </View>
+                        </View> */}
+                    </View>
 
-                <View style={styles.scoreCard}>
-                    <Text style={styles.scoreText}>Score: {score} Points</Text>
-                    <Text style={styles.resultText}>{correctAnswers}/{totalQuestions} Correct</Text>
+                    {/* <View style={styles.scoreCard}>
+                        <Text style={styles.scoreText}>Score: {score} Points</Text>
+                        <Text style={styles.resultText}>{correctAnswers}/{totalQuestions} Correct</Text>
 
-                    <View style={styles.badgeContainer}>
+                        <View style={styles.badgeContainer}>
+                            <Image source={renderBadge()} style={styles.badgeImage} />
+                            <Text style={styles.gradeText}>Grade: {calculateGrade()}</Text>
+                        </View>
+                        <View style={styles.sharePlacement}>
+                            <FAB icon="share" onPress={() => shareResult()} style={styles.shareIcon} color={GlobalColors.colors.primaryColor}></FAB>
+                        </View>
+                    </View> */}
+
+                    <View style={[styles.badgeContainer,globalStyles.mBottom20]}>
                         <Image source={renderBadge()} style={styles.badgeImage} />
-                        <Text style={styles.gradeText}>Grade: {calculateGrade()}</Text>
+                        {/* <Text style={styles.gradeText}>Grade: {calculateGrade()}</Text> */}
                     </View>
-                    <View style={styles.sharePlacement}>
-                        <FAB icon="share" onPress={()=>shareResult()} style={styles.shareIcon} color={GlobalColors.colors.primaryColor}></FAB>
-                    </View>
-                </View>
 
-                <View style={styles.progressContainer}>
-                    <Text style={styles.progressTitle}>Your Progress</Text>
-                    <View style={styles.progressBarBackground}>
-                        <Animated.View
-                            style={[
-                                styles.progressBarFill,
-                                { width: `${(correctAnswers / totalQuestions) * 100}%` },
-                            ]}
-                        />
+                    <View style={[globalStyles.flex,globalStyles.padding]}>
+                        <TouchableOpacity
+                            onPress={() =>
+                                navigation.navigate('ReviewAnswersScreen', {
+                                    questions: questions, // Pass the updated questions array
+                                    score: score,
+                                    correctAnswers: correctAnswers,
+                                    totalQuestions: totalQuestions,
+                                    title,
+                                    id
+                                })
+                            }
+                            style={[globalStyles.borderButton,{width:'50%',marginRight:10}]}
+                        >
+                            <Text style={styles.buttonText}>Review Answers</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => navigation.navigate('Home', { screen: 'HomeScreen' })} style={[globalStyles.borderButton,{width:'50%',marginRight:10}]}>
+                            <Text style={styles.buttonText}>Back to Home</Text>
+                        </TouchableOpacity>
                     </View>
-                </View>
-                <View style={[globalStyles.mTop20, { flexDirection: 'row', justifyContent: 'space-between' }]}>
-                    <TouchableOpacity
-                        onPress={() =>
-                            navigation.navigate('ReviewAnswersScreen', {
-                                questions: questions, // Pass the updated questions array
-                                score: score,
-                                correctAnswers: correctAnswers,
-                                totalQuestions: totalQuestions,
-                                title,
-                                id
-                            })
-                        }
-                        style={styles.button}
-                    >
-                        <Text style={styles.buttonText}>Review Answers</Text>
-                    </TouchableOpacity>
 
-                    <TouchableOpacity onPress={() => navigation.navigate('Home', { screen: 'HomeScreen' })} style={[styles.button, styles.secondaryButton]}>
-                        <Text style={[styles.buttonText, styles.secondaryButtonText]}>Back to Home</Text>
-                    </TouchableOpacity>
+                    {/* <View style={[globalStyles.mTop20, { flexDirection: 'row', justifyContent: 'space-between' }]}>
+                        <TouchableOpacity
+                            onPress={() =>
+                                navigation.navigate('ReviewAnswersScreen', {
+                                    questions: questions, // Pass the updated questions array
+                                    score: score,
+                                    correctAnswers: correctAnswers,
+                                    totalQuestions: totalQuestions,
+                                    title,
+                                    id
+                                })
+                            }
+                            style={styles.button}
+                        >
+                            <Text style={styles.buttonText}>Review Answers</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity onPress={() => navigation.navigate('Home', { screen: 'HomeScreen' })} style={[styles.button, styles.secondaryButton]}>
+                            <Text style={[styles.buttonText, styles.secondaryButtonText]}>Back to Home</Text>
+                        </TouchableOpacity>
+                    </View> */}
                 </View>
             </View>
-        </View>
+        </ImageBackground>
     );
 };
 
 const styles = StyleSheet.create({
     heading: {
-        fontSize: 28,
+        fontSize: 35,
         fontWeight: 'bold',
         color: GlobalColors.colors.white,
         marginTop: 20,
@@ -214,23 +262,21 @@ const styles = StyleSheet.create({
         elevation: 3,
     },
     scoreText: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        color: GlobalColors.colors.primaryColor,
+        fontSize: 15,
+        color: GlobalColors.colors.white,
     },
     resultText: {
-        fontSize: 18,
-        color: '#777',
-        marginVertical: 10,
+        fontSize: 30,
+        fontWeight: 'bold',
+        color: GlobalColors.colors.white,
     },
     badgeContainer: {
-        flexDirection: 'row',
         alignItems: 'center',
         marginTop: 20,
     },
     badgeImage: {
-        width: 50,
-        height: 50,
+        width: 150,
+        height: 150,
         marginRight: 15,
     },
     gradeText: {
@@ -247,7 +293,7 @@ const styles = StyleSheet.create({
         color: '#fff',
     },
     progressBarBackground: {
-        width: '80%',
+        width: '100%',
         height: 10,
         backgroundColor: '#e0e0e0',
         borderRadius: 5,

@@ -187,12 +187,14 @@ const SignIn = () => {
             name={username}
             placeHolder="Email Address"
             setName={setUsername}
+            isPasswordField={false}
             style={globalStyles.input}
           />
           <CustomTextInput
             name={password}
             placeHolder="Password"
             setName={setPassword}
+            isPasswordField={true}
             style={globalStyles.input}
           />
         </View>

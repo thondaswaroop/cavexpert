@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, Alert, BackHandler, Modal, Image } from 'react-native';
+import { View, Text, TouchableOpacity, Alert, BackHandler, Modal, Image, ImageBackground, ScrollView } from 'react-native';
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import QuestionComponent from '../../components/QuestionComponent';
@@ -34,7 +34,7 @@ const QuizStartScreen = ({ route }: any) => {
       if (netInfo.isConnected) {
         // Fetch questions from API
         const result: any = await httpService.get(`getAllQuestions&topic=${topicid}`);
-        console.log('resultresult',result);
+        console.log('resultresult', result);
         const formattedQuestions = result.questions.map((question: any) => ({
           id: question.id,
           title: question.title,
@@ -46,14 +46,14 @@ const QuizStartScreen = ({ route }: any) => {
           story: question.story,
           topic: topicid // Add topic ID for referencing
         }));
-        console.log('formattedQuestions',formattedQuestions);
+        console.log('formattedQuestions', formattedQuestions);
 
         setQuestions(formattedQuestions);
         await insertQuestions(formattedQuestions); // Store questions in SQLite
       } else {
         // Load questions from SQLite if offline
-        const questionsFromDB:any = await getQuestionsByTopicId(topicid);
-        console.log('offlinequestions',questionsFromDB);
+        const questionsFromDB: any = await getQuestionsByTopicId(topicid);
+        console.log('offlinequestions', questionsFromDB);
         if (questionsFromDB && questionsFromDB.length > 0) {
           const formattedQuestions = questionsFromDB.map((question: any) => ({
             id: question.id,
@@ -66,8 +66,8 @@ const QuizStartScreen = ({ route }: any) => {
             story: question.story,
             topic: topicid // Add topic ID for referencing
           }));
-          console.log('formattedQuestions',formattedQuestions);
-  
+          console.log('formattedQuestions', formattedQuestions);
+
           setQuestions(formattedQuestions);
         } else {
           Alert.alert("Error", "No questions available offline.");
@@ -140,11 +140,11 @@ const QuizStartScreen = ({ route }: any) => {
 
   const handleNextQuestion = () => {
     const currentQuestion: any = questions[currentQuestionIndex];
-    
+
     if (selectedAnswer !== null && currentQuestion) {
       displayFeedbackAndModal(currentQuestion);
 
-      
+
       setlink(currentQuestion.link);
 
       // Update the question with the selected answer
@@ -220,42 +220,58 @@ const QuizStartScreen = ({ route }: any) => {
   }
 
   return (
-    <View style={globalStyles.mainContainer}>
-      <View style={globalStyles.padding}>
-        <View style={[globalStyles.content, globalStyles.mTop10]}>
-          <View style={{ justifyContent: 'space-between', flexDirection: 'row' }}>
-            <View style={globalStyles.mBottom20}>
-              <Text style={[globalStyles.h1, globalStyles.themeTextColor]}>
-                {score} 🪙
-              </Text>
+    <ImageBackground
+      source={imagesBucket.backgroundImage}
+      style={globalStyles.mainImageBgContainer}
+      resizeMode="cover"
+    >
+      <View style={globalStyles.overlay}>
+      <ScrollView style={globalStyles.padding}>
+        <View style={globalStyles.padding}>
+          <View style={[globalStyles.content, globalStyles.mTop10]}>
+            <View style={{ justifyContent: 'space-between', flexDirection: 'row' }}>
+              <View style={globalStyles.mBottom20}>
+                {/* <Text style={[globalStyles.h1, globalStyles.themeTextColor]}>
+                    {score} 🪙
+                  </Text> */}
+              </View>
+              <View style={globalStyles.mBottom20}>
+                <Text style={[globalStyles.h1, globalStyles.themeTextColor]}>
+                  {score} 🪙
+                </Text>
+              </View>
             </View>
-            <View style={globalStyles.mBottom20}>
-              <TouchableOpacity onPress={handleNextQuestion} style={globalStyles.smallButton}>
-                <Text style={globalStyles.smallButtonText}>Next</Text>
+
+            <QuestionComponent
+              question={currentQuestion.title}
+              options={currentQuestion.options}
+              selectedAnswer={selectedAnswer}
+              onSelectAnswer={handleAnswerSelect}
+              feedback={feedback}
+              questionInfo={currentQuestion}
+              currentQuestionIndex={currentQuestionIndex}
+              totalQuestions={questions.length}
+            />
+            <View style={globalStyles.mTop20}>
+              <TouchableOpacity onPress={handleNextQuestion} style={globalStyles.borderButton}>
+                <Text style={[globalStyles.smallButtonText,globalStyles.themeTextColor]}>NEXT</Text>
               </TouchableOpacity>
             </View>
           </View>
-
-          <QuestionComponent
-            question={currentQuestion.title}
-            options={currentQuestion.options}
-            selectedAnswer={selectedAnswer}
-            onSelectAnswer={handleAnswerSelect}
-            feedback={feedback}
-          />
         </View>
-      </View>
 
-      <ExplanationModal
-        visible={modalVisible}
-        link={link}
-        onClose={() => setModalVisible(false)}
-        explanation={explanation}
-        story={story}
-        result={answerResult}
-        onContinue={handleContinue}
-      />
-    </View>
+        <ExplanationModal
+          visible={modalVisible}
+          link={link}
+          onClose={() => setModalVisible(false)}
+          explanation={explanation}
+          story={story}
+          result={answerResult}
+          onContinue={handleContinue}
+        />
+        </ScrollView>
+      </View>
+    </ImageBackground>
   );
 };
 

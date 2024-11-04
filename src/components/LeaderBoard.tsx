@@ -10,18 +10,18 @@ const LeaderBoard = ({ rank, totalScore, todayScore }: any) => {
                 <Text style={styles.statLabel}>My Rank</Text>
                 <Text style={styles.rankValue}>#{rank ? rank : 0}</Text>
             </View>
-            <View>
+            <View style={{marginLeft:-20}}>
                 <View>
-                    <Text style={[globalStyles.textCenter, globalStyles.themeTextColor]}>Your Leaderboard insights</Text>
+                    <Text style={[globalStyles.textCenter, globalStyles.themeTextColor,{marginLeft:-5}]}>Your Leaderboard insights</Text>
                 </View>
                 <View style={styles.statValuesRow}>
                     <View style={[globalStyles.padding]}>
                         <Text style={[styles.statValue, globalStyles.textCenter]}>{totalScore ? totalScore : 0}</Text>
-                        <Text style={[styles.statLabel, , globalStyles.textCenter]}>Overall Score</Text>
+                        <Text style={[styles.statLabel, globalStyles.textCenter]}>Overall Score</Text>
                     </View>
                     <View style={[globalStyles.padding]}>
                         <Text style={[styles.statValue, globalStyles.textCenter]}>{todayScore ? todayScore : 0}</Text>
-                        <Text style={[styles.statLabel, , globalStyles.textCenter]}>Today Score</Text>
+                        <Text style={[styles.statLabel, globalStyles.textCenter]}>Today Score</Text>
                     </View>
                 </View>
             </View>
@@ -73,7 +73,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-evenly',
         width: '100%',
-        marginTop: 5
+        marginTop: 5,
+        marginLeft:-5
     },
 });
 

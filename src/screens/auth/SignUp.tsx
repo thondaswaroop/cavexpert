@@ -50,7 +50,7 @@ const SignUp = () => {
   const signUpClick = async () => {
     showLoader();
     if (isEmpty(fullname)) {
-      showToast('warning', toast, 'Please Enter Full Name');
+      showToast('warning', toast, 'Please Enter First Name');
       hideLoader();
       return;
     } else if (isEmpty(nickname)) {
@@ -118,7 +118,7 @@ const SignUp = () => {
   //             style={authenticationStyles.logoImage}
 
   //           />
-            
+
   //           <Text style={[globalStyles.textCenter, globalStyles.h2, globalStyles.caps, globalStyles.mBottom20, globalStyles.themeTextColor]}>
   //             SIGN UP
   //           </Text>
@@ -147,20 +147,20 @@ const SignUp = () => {
   //             />
   //           </View>
 
-            // <View style={{ width: '95%' }}>
-            //   <DropdownComponent
-            //     data={ageSelectionData}
-            //     label="Age"
-            //     placeholder="Select Age Group"
-            //     onValueChange={(value: string) => setAgeGroup(value)} // Get the selected value back
-            //   />
-            //   <DropdownComponent
-            //     data={relationSelectionData}
-            //     label="RelationShip Status"
-            //     placeholder="Select RelationShip Status"
-            //     onValueChange={(value: string) => setRelationship(value)} // Get the selected value back
-            //   />
-            // </View>
+  // <View style={{ width: '95%' }}>
+  //   <DropdownComponent
+  //     data={ageSelectionData}
+  //     label="Age"
+  //     placeholder="Select Age Group"
+  //     onValueChange={(value: string) => setAgeGroup(value)} // Get the selected value back
+  //   />
+  //   <DropdownComponent
+  //     data={relationSelectionData}
+  //     label="RelationShip Status"
+  //     placeholder="Select RelationShip Status"
+  //     onValueChange={(value: string) => setRelationship(value)} // Get the selected value back
+  //   />
+  // </View>
 
   //           <View style={{ flex: 1, justifyContent: 'flex-start', alignItems: 'flex-start', marginHorizontal: 10 }}>
   //             <PaperTextInput
@@ -188,7 +188,7 @@ const SignUp = () => {
   //   </View>
   // );
 
-  
+
   // New code design (01-11-2024)r
 
   return (
@@ -208,18 +208,21 @@ const SignUp = () => {
         <View style={globalStyles.newInputContainer}>
           <CustomTextInput
             name={fullname}
+            isPasswordField={false}
             placeHolder="First Name"
             setName={setFullName}
             style={globalStyles.input}
           />
           <CustomTextInput
+            isPasswordField={false}
             name={nickname}
-            placeHolder="Nice Name"
+            placeHolder="Nick Name"
             setName={setNickName}
             style={globalStyles.input}
           />
 
           <CustomTextInput
+            isPasswordField={false}
             name={email}
             placeHolder="Email Address"
             setName={setEmail}
@@ -234,19 +237,20 @@ const SignUp = () => {
             placeholder="Select Age Group"
             onValueChange={(value: string) => setAgeGroup(value)} // Get the selected value back
           />
-          <View style={{marginTop:10}}>
-          <DropdownComponent
-            data={relationSelectionData}
-            label="RelationShip Status"
-            placeholder="Select RelationShip Status"
-            onValueChange={(value: string) => setRelationship(value)} // Get the selected value back
-          />
+          <View style={{ marginTop: 10 }}>
+            <DropdownComponent
+              data={relationSelectionData}
+              label="RelationShip Status"
+              placeholder="Select RelationShip Status"
+              onValueChange={(value: string) => setRelationship(value)} // Get the selected value back
+            />
           </View>
         </View>
 
         <View style={globalStyles.newInputContainer}>
           <CustomTextInput
             name={password}
+            isPasswordField={true}
             placeHolder="Password"
             setName={setPassword}
             style={globalStyles.input}
@@ -259,14 +263,13 @@ const SignUp = () => {
             mode="contained"
             onPress={signUpClick}
           >
-            Sign In
+            Sign Up
           </Button>
         </View>
 
         <View style={{ marginTop: 20 }}>
           <Text style={[globalStyles.textCenter, globalStyles.p, { color: GlobalColors.colors.black }]}>
-            Don't have an Account?{' '}
-            <Text style={globalStyles.bold} onPress={() => navigation.navigate('SignIn')}> Sign In
+            Go Back to <Text style={globalStyles.bold} onPress={() => navigation.navigate('SignIn')}> Sign In
             </Text>
           </Text>
         </View>

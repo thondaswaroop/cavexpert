@@ -141,7 +141,7 @@ const ViewTopic = ({ route }: any) => {
             <Text>{topic.categorytitle}</Text>
           </Text>
 
-          <Text style={[globalStyles.mTop10, globalStyles.h2, globalStyles.themeTextColor]}>{topic.description}</Text>
+          <Text style={[globalStyles.mTop10, globalStyles.normalFont, globalStyles.themeTextColor]}>{topic.description}</Text>
           <View style={{ justifyContent: 'space-between', flexDirection: 'row' }}>
             <Text style={[globalStyles.mTop10, globalStyles.h2, globalStyles.themeTextColor]}>
               Quiz Questions: {topic.questionsLength}
@@ -155,8 +155,9 @@ const ViewTopic = ({ route }: any) => {
         </View>
       </ScrollView>
 
-      <View style={[globalStyles.buttomButton, globalStyles.fullWidth, globalStyles.padding]}>
-        <TouchableOpacity style={globalStyles.playButton} onPress={startQuiz}>
+      <View style={[globalStyles.buttomButton, globalStyles.padding, globalStyles.fullWidth, globalStyles.flex]}>
+        <View></View>
+        <TouchableOpacity style={[globalStyles.playButton, globalStyles.textEnd, globalStyles.halfwidth]} onPress={startQuiz}>
           <Text style={globalStyles.themeTextColor}>Let's Go</Text>
         </TouchableOpacity>
       </View>

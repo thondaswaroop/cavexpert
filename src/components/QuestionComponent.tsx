@@ -8,6 +8,9 @@ interface QuestionComponentProps {
   selectedAnswer: number | null;
   onSelectAnswer: (index: number) => void;
   feedback: { [key: number]: 'correct' | 'wrong' };
+  questionInfo: any;
+  currentQuestionIndex: number;
+  totalQuestions: number;
 }
 
 const QuestionComponent: React.FC<QuestionComponentProps> = ({
@@ -15,12 +18,24 @@ const QuestionComponent: React.FC<QuestionComponentProps> = ({
   options,
   selectedAnswer,
   onSelectAnswer,
-  feedback
+  feedback,
+  questionInfo,
+  currentQuestionIndex,
+  totalQuestions
 }) => {
+  console.log('questionInfo', questionInfo);
   return (
     <View style={styles.container}>
       {/* Question Text */}
-      <Text style={[styles.questionText, globalStyles.themeTextColor]}>{question}</Text>
+      <View>
+        <Text style={[globalStyles.mediumFont, globalStyles.p, globalStyles.themeTextColor,  globalStyles.mBottom10]}>
+          Question {currentQuestionIndex + 1} of {totalQuestions}
+        </Text>
+      </View>
+
+      <View style={[globalStyles.textCenter, globalStyles.mBottom20]}>
+        <Text style={[styles.questionText, globalStyles.textCenter, globalStyles.themeTextColor]}>{question}</Text>
+      </View>
 
       {/* Options */}
       <FlatList
@@ -66,6 +81,11 @@ const styles = StyleSheet.create({
   },
   questionText: {
     fontSize: 18,
+    fontWeight: 'bold',
+    lineHeight: 25,
+    alignContent: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
     marginBottom: 20,
   },
   optionButton: {
@@ -75,8 +95,10 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   optionText: {
-    fontSize: 16,
+    fontSize: 15,
+    fontWeight: 'bold',
     color: '#333',
+    textAlign: 'center'
   },
 });
 
