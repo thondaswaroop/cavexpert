@@ -9,6 +9,7 @@ import { ActivityIndicator, MD2Colors } from 'react-native-paper';
 import { useSelector,useDispatch } from 'react-redux';
 import { RootState } from '../redux/store'; // Adjust this path to your store setup
 import { setIntroDisplayed } from '../redux/slice/AuthSlice';
+import Welcome from '../screens/common/Welcome';
 
 const Stack = createNativeStackNavigator();
 
@@ -44,7 +45,8 @@ const AuthNavigation = () => {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       {!isIntroDisplayed ? (
-        <Stack.Screen name="Intro" component={Intro} />
+        // <Stack.Screen name="Intro" component={Intro} />
+        <Stack.Screen name="Welcome" component={Welcome} />
       ) : (
         <Stack.Screen name="SignIn" component={SignIn} />
       )}

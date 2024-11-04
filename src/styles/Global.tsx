@@ -23,6 +23,13 @@ export const globalStyles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#1e1e1e'
     },
+    mainImageBgContainer: {
+        flex: 1
+    },
+    overlay: {
+        flex: 1,
+        backgroundColor: 'rgba(0, 0, 0, 0.6)', // Semi-transparent overlay for readability
+      },
     topicViewImageContainer: {
         alignItems: 'center',
         marginVertical: 20,
@@ -91,6 +98,10 @@ export const globalStyles = StyleSheet.create({
         margin: 2,
         fontSize: 11,
     },
+    mediumFont: {
+        padding: 2,
+        fontSize: 14,
+    },
     bold: {
         fontWeight: 'bold',
     },
@@ -110,6 +121,11 @@ export const globalStyles = StyleSheet.create({
         fontSize: 13,
         marginBottom: 5,
     },
+    normalFont:{
+        fontSize: 15,
+        marginBottom: 5,
+        lineHeight:20
+    },
     caps: {
         textTransform: 'uppercase',
     },
@@ -118,6 +134,12 @@ export const globalStyles = StyleSheet.create({
     },
     mTop20: {
         marginTop: 20,
+    },
+    mTop50: {
+        marginTop: 50,
+    },
+    mTop100: {
+        marginTop: 100,
     },
     mBottom2: {
         marginBottom: 2
@@ -362,6 +384,11 @@ export const globalStyles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center'
     },
+    halfwidth:{
+        width: '50%',
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
     inputContainer: {
         width: '80%',
         alignItems: 'center',
@@ -387,6 +414,14 @@ export const globalStyles = StyleSheet.create({
         borderRadius: 3,
         width: '100%',
         backgroundColor: GlobalColors.colors.primaryColor,
+        alignItems: 'center',
+    },
+    borderButton: {
+        padding: 12,
+        borderRadius: 3,
+        width: '100%',
+        borderColor: GlobalColors.colors.white,
+        borderWidth:1,
         alignItems: 'center',
     },
     buttonText: {
@@ -458,6 +493,11 @@ export const globalStyles = StyleSheet.create({
       image: {
         width: '80%', 
         height: 120, 
+        resizeMode: 'center',
+      },
+      smallImage: {
+        width: '60%', 
+        height: 50, 
         resizeMode: 'center',
       },
       newInputContainer: {

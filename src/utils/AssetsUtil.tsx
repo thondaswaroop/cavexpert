@@ -17,6 +17,7 @@ import userIcon2 from '../assets/images/usericons/2.png';
 import userIcon3 from '../assets/images/usericons/3.png';
 import userIcon4 from '../assets/images/usericons/4.png';
 import userIcon5 from '../assets/images/usericons/5.png';
+import backgroundImage from '../assets/images/bg.png';
 
 
 export const imagesBucket = {
@@ -38,6 +39,7 @@ export const imagesBucket = {
     "userIcon2":userIcon2,
     "userIcon3":userIcon3,
     "userIcon4":userIcon4,
-    "userIcon5":userIcon5
+    "userIcon5":userIcon5,
+    "backgroundImage":backgroundImage
     
 }
