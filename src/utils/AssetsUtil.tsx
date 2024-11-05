@@ -1,6 +1,5 @@
 import logo from '../assets/images/logo.png';
 import logo_white from '../assets/images/logo_white.png';
-import vLogo from '../assets/images/mlogo.png';
 import icon from '../assets/images/icon.png';
 import intro1 from '../assets/images/intro1.png';
 import intro2 from '../assets/images/intro2.png';
@@ -17,13 +16,14 @@ import userIcon2 from '../assets/images/usericons/2.png';
 import userIcon3 from '../assets/images/usericons/3.png';
 import userIcon4 from '../assets/images/usericons/4.png';
 import userIcon5 from '../assets/images/usericons/5.png';
+import userIcon6 from '../assets/images/usericons/6.png';
 import backgroundImage from '../assets/images/bg.png';
+import rank from '../assets/images/rank.png';
 
 
 export const imagesBucket = {
     "logo": logo,
     "logo_white":logo_white,
-    "vLogo": vLogo,
     "icon": icon,
     "intro1": intro1,
     "intro2": intro2,
@@ -40,6 +40,8 @@ export const imagesBucket = {
     "userIcon3":userIcon3,
     "userIcon4":userIcon4,
     "userIcon5":userIcon5,
-    "backgroundImage":backgroundImage
+    "userIcon6":userIcon6,
+    "backgroundImage":backgroundImage,
+    "rank":rank
     
 }
