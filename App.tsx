@@ -133,7 +133,7 @@ const App: React.FC = () => {
             <SafeAreaView style={styles.container}>
               <Loader />
               <PaperProvider theme={theme}>
-                {isSplashVisible ? <Splash /> : <LoadNavigationControl />}
+              {isSplashVisible ? <Splash /> : <LoadNavigationControl />}
               </PaperProvider>
             </SafeAreaView>
           </NavigationContainer>

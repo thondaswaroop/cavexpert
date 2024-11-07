@@ -12,7 +12,7 @@ const LeaderBoard = ({ rank, totalScore, todayScore }: any) => {
             </View>
             <View style={{marginLeft:-20}}>
                 <View>
-                    <Text style={[globalStyles.textCenter, globalStyles.themeTextColor,{marginLeft:-5}]}>Your Leaderboard insights</Text>
+                    <Text style={[globalStyles.textCenter, globalStyles.themeTextColor,{marginLeft:-5}]}>My Legacy</Text>
                 </View>
                 <View style={styles.statValuesRow}>
                     <View style={[globalStyles.padding]}>
@@ -21,7 +21,7 @@ const LeaderBoard = ({ rank, totalScore, todayScore }: any) => {
                     </View>
                     <View style={[globalStyles.padding]}>
                         <Text style={[styles.statValue, globalStyles.textCenter]}>{todayScore ? todayScore : 0}</Text>
-                        <Text style={[styles.statLabel, globalStyles.textCenter]}>Today Score</Text>
+                        <Text style={[styles.statLabel, globalStyles.textCenter]}>Today's Score</Text>
                     </View>
                 </View>
             </View>

@@ -12,6 +12,7 @@ import { showToast } from '../../utils/common/ToastUtil';
 import NetInfo from '@react-native-community/netinfo'; // Import NetInfo
 import { FAB } from 'react-native-paper';
 import { AppEnvironment } from '../../constants/Global';
+import Ficon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const QuizResultsScreen = ({ route, navigation }: any) => {
     const { score, correctAnswers, totalQuestions, title, id, questions } = route.params;
@@ -76,6 +77,7 @@ const QuizResultsScreen = ({ route, navigation }: any) => {
                 showToast('success', toast, response.message); // Changed to 'success' for successful save
                 loggerService('default', 'Save Quiz Response : ', response);
             }).catch((error: any) => {
+                console.log('responseresponseError', error);
                 hideLoader();
                 loggerService('error', 'Save Quiz Error Response : ', error);
             });
@@ -133,8 +135,8 @@ const QuizResultsScreen = ({ route, navigation }: any) => {
     const shareResult = () => {
         socialShare(
             AppEnvironment.MainLogo,
-            '🚀 I just leveled up in "The Man Cave"! 🚀',
-            "I scored " + score + " points in the latest quiz about Attracting the Right Person! 📚💡With " + correctAnswers + " correct answers, I'm learning how to understand myself better and become the best version of me. 💪 \n\n Think you can beat my score? 🏆 Join me in The Man Cave and discover what it takes to attract the right people into your life and build real, lasting relationships. \n\n ❤️ Click the link to download the app and start your journey now: [https://play.google.com/store/apps/details?id=com.whatsapp] \n 📲 Download The Man Cave and challenge yourself today!",
+            '🚀 I just leveled up in "caveXpert"! 🚀',
+            "I scored " + score + " points in the latest quiz about Attracting the Right Person! 📚💡With " + correctAnswers + " correct answers, I'm learning how to understand myself better and become the best version of me. 💪 \n\n Think you can beat my score? 🏆 Join me in caveXpert and discover what it takes to attract the right people into your life and build real, lasting relationships. \n\n ❤️ Click the link to download the app and start your journey now: [https://play.google.com/store/apps/details?id=com.whatsapp] \n 📲 Download caveXpert and challenge yourself today!",
             AppEnvironment.StoreLink
         );
     }
@@ -150,7 +152,7 @@ const QuizResultsScreen = ({ route, navigation }: any) => {
                     <Text style={[styles.heading, globalStyles.mBottom20, globalStyles.mTop50]}>Quiz Completed!</Text>
                     <View style={globalStyles.padding}>
                         <View>
-                            <Text style={[globalStyles.themeTextColor, globalStyles.textCenter]}>
+                            <Text style={[globalStyles.themeTextColor, globalStyles.textCenter, { fontSize: 17 }]}>
                                 YOUR SCORE
                             </Text>
                         </View>
@@ -189,12 +191,12 @@ const QuizResultsScreen = ({ route, navigation }: any) => {
                         </View>
                     </View> */}
 
-                    <View style={[styles.badgeContainer,globalStyles.mBottom20]}>
+                    <View style={[styles.badgeContainer, globalStyles.mBottom20]}>
                         <Image source={renderBadge()} style={styles.badgeImage} />
                         {/* <Text style={styles.gradeText}>Grade: {calculateGrade()}</Text> */}
                     </View>
 
-                    <View style={[globalStyles.flex,globalStyles.padding]}>
+                    <View style={[globalStyles.flex, globalStyles.padding]}>
                         <TouchableOpacity
                             onPress={() =>
                                 navigation.navigate('ReviewAnswersScreen', {
@@ -206,11 +208,11 @@ const QuizResultsScreen = ({ route, navigation }: any) => {
                                     id
                                 })
                             }
-                            style={[globalStyles.borderButton,{width:'50%',marginRight:10}]}
+                            style={[globalStyles.borderButton, { width: '50%', marginRight: 10 }]}
                         >
                             <Text style={styles.buttonText}>Review Answers</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => navigation.navigate('Home', { screen: 'HomeScreen' })} style={[globalStyles.borderButton,{width:'50%',marginRight:10}]}>
+                        <TouchableOpacity onPress={() => navigation.navigate('Home', { screen: 'HomeScreen' })} style={[globalStyles.borderButton, { width: '50%', marginRight: 10 }]}>
                             <Text style={styles.buttonText}>Back to Home</Text>
                         </TouchableOpacity>
                     </View>
@@ -236,6 +238,12 @@ const QuizResultsScreen = ({ route, navigation }: any) => {
                             <Text style={[styles.buttonText, styles.secondaryButtonText]}>Back to Home</Text>
                         </TouchableOpacity>
                     </View> */}
+
+                    <View style={styles.sharePlacement}>
+                        <FAB icon="share" onPress={() => shareResult()} style={styles.shareIcon} color={GlobalColors.colors.white}></FAB>
+                        {/* <FAB icon="share" onPress={() => shareResult()} style={styles.shareIcon} color={GlobalColors.colors.white}></FAB> */}
+                        {/* <Ficon name='share-all' color={GlobalColors.colors.white} size={30}  style={{ padding: 10}}/> */}
+                    </View>
                 </View>
             </View>
         </ImageBackground>
@@ -262,7 +270,7 @@ const styles = StyleSheet.create({
         elevation: 3,
     },
     scoreText: {
-        fontSize: 15,
+        fontSize: 18,
         color: GlobalColors.colors.white,
     },
     resultText: {
@@ -316,7 +324,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     buttonText: {
-        fontSize: 18,
+        fontSize: 14,
         color: '#fff',
         fontWeight: '600',
     },
@@ -329,14 +337,23 @@ const styles = StyleSheet.create({
         color: GlobalColors.colors.primaryColor,
     },
     sharePlacement: {
-        position: 'absolute',
-        bottom: 10,
-        right: 10,
+        marginTop: 20,
+        textAlign: 'center',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor:'#0000'
+        // position: 'absolute',
+        // bottom: '5%',
+        // right: '5%',
         // top:10
     },
     shareIcon: {
-        backgroundColor: GlobalColors.colors.white,
-        color: GlobalColors.colors.white
+        width: 60,
+        height: 60,
+        borderRadius: 30,
+        borderWidth:1,
+        borderColor:GlobalColors.colors.white,
+        backgroundColor:'#0000'
     }
 });
 

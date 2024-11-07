@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   Alert,
   Image,
@@ -13,7 +13,7 @@ import CommonHeader from '../../components/Header';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch } from 'react-redux';
 import { setIsUserLoggedIn } from '../../redux/slice/AuthSlice';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { Avatar, Divider, Icon, IconButton } from 'react-native-paper';
 import { globalStyles, imagesBucket } from '../../Resources';
 import { GlobalColors } from '../../styles/Colors';
@@ -99,8 +99,8 @@ const Profile = () => {
   const shareResult = () => {
     socialShare(
       AppEnvironment.MainLogo,
-      '🚀 Unlock Your Best Self with The Man Cave! 🚀',
-      'Guys, ready to level up your dating game? 💪 "The Man Cave" is here to help you understand yourself better, learn what it takes to attract women, and build real, lasting relationships. Dive into quizzes, read insightful stories, and become a top learner on our leaderboard! 🏆 \n\n Download the app now, start your journey, and show the world that you are ready for what comes next. 📲✨ \n\n Download The Man Cave & Start Your Journey!',
+      '🚀 Unlock Your Best Self with caveXpert! 🚀',
+      'Guys, ready to level up your dating game? 💪 "caveXpert" is here to help you understand yourself better, learn what it takes to attract women, and build real, lasting relationships. Dive into quizzes, read insightful stories, and become a top learner on our leaderboard! 🏆 \n\n Download the app now, start your journey, and show the world that you are ready for what comes next. 📲✨ \n\n Download caveXpert & Start Your Journey!',
       AppEnvironment.StoreLink
     );
   };
@@ -123,6 +123,14 @@ const Profile = () => {
     // navigation.navigate('EditProfile'); // Ensure 'EditProfile' is a valid screen in your navigator
   };
 
+
+
+  const onScreenFocus = useCallback(() => {
+    getUserInfo();
+  }, []);
+
+  useFocusEffect(onScreenFocus);
+
   const renderUserIcon = (userIcon: any) => {
     switch (userIcon) {
       case '1':
@@ -135,10 +143,34 @@ const Profile = () => {
         return imagesBucket.userIcon4;
       case '5':
         return imagesBucket.userIcon5;
+      case '6':
+        return imagesBucket.userIcon6;
       default:
-        return imagesBucket.userIcon5;
+        return imagesBucket.userIcon6;
     }
   };
+
+  const getUserInfo = async () => {
+    let userId = await AsyncStorage.getItem('UserId');
+    httpService.post('userInfo', { userID: userId }).then((response1: any) => {
+      setUserData(response1.userinfo);
+    });
+  }
+
+  const selectUserIcon = async (usericon: any) => {
+    let userId = await AsyncStorage.getItem('UserId');
+
+    const data = {
+      'userId': userId,
+      'userIcon': usericon
+    }
+    httpService.post('updateUserIcon', data).then(async (response: any) => {
+      if (response.status) {
+        getUserInfo();
+        setSelectAvatarSelection(false);
+      }
+    });
+  }
 
   return (
     <View style={globalStyles.mainContainer}>
@@ -154,7 +186,7 @@ const Profile = () => {
             <View style={styles.modalContainer}>
               <View style={styles.modalHeader}>
                 <View style={globalStyles.flex}>
-                  <Text style={[globalStyles.h2,globalStyles.mTop10]}>Select Your Avatars</Text>
+                  <Text style={[globalStyles.h2, globalStyles.mTop10]}>Select Your Avatars</Text>
                   <IconButton
                     icon="close" // You can use the "close" icon or any other from your icon set
                     size={20}
@@ -164,31 +196,48 @@ const Profile = () => {
                 </View>
               </View>
               <View style={styles.avatarContainer}>
-                <Avatar.Image
-                  source={renderUserIcon('1')} // Use fetched profile image
-                  size={100}
-                  style={styles.avatarImage}
-                />
-                <Avatar.Image
-                  source={renderUserIcon('2')} // Use fetched profile image
-                  size={100}
-                  style={styles.avatarImage}
-                />
-                <Avatar.Image
-                  source={renderUserIcon('3')} // Use fetched profile image
-                  size={100}
-                  style={styles.avatarImage}
-                />
-                <Avatar.Image
-                  source={renderUserIcon('4')} // Use fetched profile image
-                  size={100}
-                  style={styles.avatarImage}
-                />
-                <Avatar.Image
-                  source={renderUserIcon('5')} // Use fetched profile image
-                  size={100}
-                  style={styles.avatarImage}
-                />
+                <TouchableOpacity onPress={() => selectUserIcon('1')}>
+                  <Avatar.Image
+                    source={renderUserIcon('1')} // Use fetched profile image
+                    size={100}
+                    style={styles.avatarImage}
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => selectUserIcon('2')}>
+                  <Avatar.Image
+                    source={renderUserIcon('2')} // Use fetched profile image
+                    size={100}
+                    style={styles.avatarImage}
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => selectUserIcon('3')}>
+                  <Avatar.Image
+                    source={renderUserIcon('3')} // Use fetched profile image
+                    size={100}
+                    style={styles.avatarImage}
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => selectUserIcon('4')}>
+                  <Avatar.Image
+                    source={renderUserIcon('4')} // Use fetched profile image
+                    size={100}
+                    style={styles.avatarImage}
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => selectUserIcon('5')}>
+                  <Avatar.Image
+                    source={renderUserIcon('5')} // Use fetched profile image
+                    size={100}
+                    style={styles.avatarImage}
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => selectUserIcon('6')}>
+                  <Avatar.Image
+                    source={renderUserIcon('6')} // Use fetched profile image
+                    size={100}
+                    style={styles.avatarImage}
+                  />
+                </TouchableOpacity>
               </View>
             </View>
           </View>
@@ -227,7 +276,7 @@ const Profile = () => {
 
                   <View style={[globalStyles.flex, globalStyles.mTop20]}>
                     <Image
-                      source={imagesBucket.badge_participation}
+                      source={imagesBucket.rank}
                       style={{ height: 30, width: 30 }}
                     />
                     <Text style={[globalStyles.h2, globalStyles.caps, { flex: 0.5, marginTop: 4 }]}>

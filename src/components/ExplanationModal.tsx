@@ -1,18 +1,16 @@
 import React, { useEffect, useRef } from 'react';
-import { View, Text, TouchableOpacity, Modal, ScrollView, StyleSheet, Animated, Easing,Linking } from 'react-native';
+import { View, Text, TouchableOpacity, Modal, ScrollView, StyleSheet, Animated, Easing, Linking } from 'react-native';
 import Ficon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { GlobalColors } from '../styles/Colors';
 import { globalStyles } from '../Resources';
 
-const ExplanationModal = ({ visible, onClose, explanation, link, story, result, onContinue }: any) => {
-    console.log('link',link);
-    const pulseAnimation = useRef(new Animated.Value(1)).current; // Initialize for pulse animation
-    const shakeAnimation = useRef(new Animated.Value(0)).current; // Initialize for shake animation
+const ExplanationModal = ({ visible, onClose, explanation, link, story, result, onContinue }) => {
+    const pulseAnimation = useRef(new Animated.Value(1)).current;
+    const shakeAnimation = useRef(new Animated.Value(0)).current;
 
     useEffect(() => {
         if (visible) {
             if (result === 'correct') {
-                // Pulse animation for correct answer
                 Animated.loop(
                     Animated.sequence([
                         Animated.timing(pulseAnimation, {
@@ -28,10 +26,9 @@ const ExplanationModal = ({ visible, onClose, explanation, link, story, result, 
                             useNativeDriver: true,
                         }),
                     ]),
-                    { iterations: 3 } // Pulse 3 times
+                    { iterations: 3 }
                 ).start();
             } else if (result === 'wrong') {
-                // Shake animation for wrong answer
                 Animated.sequence([
                     Animated.timing(shakeAnimation, {
                         toValue: 10,
@@ -54,20 +51,16 @@ const ExplanationModal = ({ visible, onClose, explanation, link, story, result, 
     }, [result, visible]);
 
     const shakeStyle = {
-        transform: [
-            { translateX: shakeAnimation }
-        ],
+        transform: [{ translateX: shakeAnimation }],
     };
 
     const pulseStyle = {
-        transform: [
-            { scale: pulseAnimation }
-        ],
+        transform: [{ scale: pulseAnimation }],
     };
 
-    const openURL = ((urlLink:any)=>{
+    const openURL = (urlLink) => {
         Linking.openURL(urlLink);
-    })
+    };
 
     return (
         <Modal
@@ -82,9 +75,9 @@ const ExplanationModal = ({ visible, onClose, explanation, link, story, result, 
                         {result === 'correct' && (
                             <Animated.View style={[styles.animationContainer, pulseStyle]}>
                                 <Text style={[styles.animationText, styles.modalTitle]}>
-
                                     <Ficon name='emoticon-happy-outline' color={GlobalColors.colors.primaryColor} size={30} /> &nbsp;
-                                    Correct Answer!</Text>
+                                    Correct Answer!
+                                </Text>
                             </Animated.View>
                         )}
                         {result === 'wrong' && (
@@ -97,25 +90,35 @@ const ExplanationModal = ({ visible, onClose, explanation, link, story, result, 
                     </View>
 
                     <ScrollView contentContainerStyle={styles.modalContent}>
-                        <View style={globalStyles.mBottom20}>
-                            {result === 'correct' && (
-                                <Text style={styles.modalSubtitle}>Nice work! Here's something extra to deepen your understanding.</Text>
-                            )}
-                            {result === 'wrong' && (
-                                <Text style={styles.modalSubtitle}>Great Effort! But here's what you need to know</Text>
-                            )}
-                        </View>
+                        <View style={globalStyles.padding}>
+                            <View style={globalStyles.mBottom20}>
+                                {result === 'correct' && (
+                                    <Text style={styles.modalSubtitle}>Nice work! Here's something extra to deepen your understanding.</Text>
+                                )}
+                                {result === 'wrong' && (
+                                    <Text style={styles.modalSubtitle}>Great Effort! But here's what you need to know</Text>
+                                )}
+                            </View>
 
-                        <View style={styles.card}>
-                            <Text style={styles.sectionTitle}>Insight</Text>
-                            <Text style={[styles.modalText]}>{explanation}</Text>
-                            <TouchableOpacity style={styles.anchorTagDesign} ><Text style={[globalStyles.anchorTag,{fontSize:13}]} onPress={() => openURL(link)}>Click here</Text></TouchableOpacity>
-                        </View>
+                            <View style={styles.card}>
+                                <Text style={styles.sectionTitle}>Insight</Text>
+                                <Text style={[styles.modalText]}>{explanation}</Text>
+                                {link !== '' && (
+                                    <TouchableOpacity style={styles.anchorTagDesign}>
+                                        <Text style={[globalStyles.anchorTag, { fontSize: 13 }]} onPress={() => openURL(link)}>Click here</Text>
+                                    </TouchableOpacity>
+                                )}
+                            </View>
 
-                        <View style={styles.card}>
-                            <Text style={styles.sectionTitle}>Story</Text>
-                            <Text style={[styles.modalText]}>{story} </Text>
-                            <TouchableOpacity style={styles.anchorTagDesign}><Text style={[globalStyles.anchorTag,{fontSize:13}]} onPress={() => openURL(link)}>Click here</Text></TouchableOpacity>
+                            <View style={styles.card}>
+                                <Text style={styles.sectionTitle}>Story</Text>
+                                <Text style={[styles.modalText]}>{story}</Text>
+                                {link !== '' && (
+                                    <TouchableOpacity style={styles.anchorTagDesign}>
+                                        <Text style={[globalStyles.anchorTag, { fontSize: 13 }]} onPress={() => openURL(link)}>Click here</Text>
+                                    </TouchableOpacity>
+                                )}
+                            </View>
                         </View>
                     </ScrollView>
 
@@ -135,12 +138,12 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(0, 0, 0, 0.6)',
     },
     modalContainer: {
-        backgroundColor: '#fff',
+        backgroundColor: '#000',
         width: '100%',
         height: '75%',
         borderTopLeftRadius: 30,
         borderTopRightRadius: 30,
-        paddingHorizontal: 20,
+        paddingHorizontal: 10,
         paddingVertical: 10,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 4 },
@@ -153,24 +156,27 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderBottomColor: GlobalColors.colors.lightGrey,
         padding: 10,
+        backgroundColor: '#fff', // Header background for differentiation
+        borderTopLeftRadius: 30,
+        borderTopRightRadius: 30,
     },
     modalTitle: {
         fontSize: 24,
         fontWeight: 'bold',
-        color: '#333',
+        color: '#000', // Heading text color for contrast against white header
         textAlign: 'center',
         marginBottom: 5,
     },
     modalSubtitle: {
         fontSize: 16,
-        color: '#666',
+        color: '#ccc',
         textAlign: 'center',
     },
     modalContent: {
         paddingBottom: 20,
     },
     card: {
-        backgroundColor: '#f9f9f9',
+        backgroundColor: '#222',
         padding: 15,
         borderRadius: 3,
         marginBottom: 15,
@@ -182,7 +188,7 @@ const styles = StyleSheet.create({
     sectionTitle: {
         fontSize: 18,
         fontWeight: '600',
-        color: '#333',
+        color: '#fff',
         borderBottomColor: GlobalColors.colors.secondaryGrey,
         borderBottomWidth: 1,
         padding: 10,
@@ -190,7 +196,8 @@ const styles = StyleSheet.create({
     },
     modalText: {
         fontSize: 15,
-        color: '#555',
+        color: '#fff',
+        backgroundColor:'none',
         lineHeight: 24,
     },
     continueButton: {
@@ -214,15 +221,16 @@ const styles = StyleSheet.create({
     animationText: {
         fontSize: 32,
         fontWeight: 'bold',
-        color: '#000',
+        color: '#fff',
     },
     anchorTagDesign: {
-        flex:1,
-        textAlign:'right',
-        justifyContent:'flex-end',
-        alignItems:'flex-end',
-        marginTop:5
+        flex: 1,
+        textAlign: 'right',
+        justifyContent: 'flex-end',
+        alignItems: 'flex-end',
+        marginTop: 5,
     }
 });
+
 
 export default ExplanationModal;

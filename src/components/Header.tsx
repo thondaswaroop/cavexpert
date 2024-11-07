@@ -27,8 +27,9 @@ const styles = StyleSheet.create({
         elevation: 5,
     },
     logo: {
-        width: 60,
-        height: 50,
+        width: 30,
+        height: 30,
+        marginLeft:10
     },
     headerText: {
         color: '#fff',

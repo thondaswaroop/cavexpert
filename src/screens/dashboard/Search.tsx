@@ -1,103 +1,87 @@
-import React, { useCallback, useState, useMemo } from 'react';
-import { View, TextInput, FlatList, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import CommonHeader from '../../components/Header';
 import { globalStyles } from '../../Resources';
+import { TextInput } from 'react-native-paper';
 import { httpService } from '../../services/api/Api';
-import { useFocusEffect } from '@react-navigation/native';
-import { TouchableOpacity } from 'react-native';
-
-interface Topic {
-  title: string; // Adjust based on your actual structure
-}
-
-interface Category {
-  id: string; // Or number, based on your API
-  name: string;
-  topics: Topic[];
-}
+import { useNavigation } from '@react-navigation/native';
 
 const Search = () => {
   const [query, setQuery] = useState('');
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [expandedIds, setExpandedIds] = useState<string[]>([]); // Changed to hold multiple expanded IDs
-  const [error, setError] = useState<string | null>(null);
+  const [categoryList, setCategoryList] = useState<any>([]);
+  const [filterCategoryList, setFilterCategoryList] = useState<any>([]);
+  const navigation: any = useNavigation(); // Navigation hook
 
-  const onScreenFocus = useCallback(() => {
-    loadCategories();
+  useEffect(() => {
+    fetchCategoriesTopics();
   }, []);
 
-  useFocusEffect(onScreenFocus);
-
-  const loadCategories = async () => {
+  const fetchCategoriesTopics = async () => {
     try {
-      const result: any = await httpService.get('categories');
-      console.log('API response:', result);
-
-      if (result.status && Array.isArray(result.categories)) {
-        const mainArray: Category[] = await Promise.all(
-          result.categories.map(async (category: any) => {
-            const topicData: any = await httpService.post('topics', { category: category.id });
-            const topics = Array.isArray(topicData.topics) ? topicData.topics : [];
-            return { id: category.id, name: category.title, topics };
-          })
-        );
-        setCategories(mainArray);
-
-        // Set all category IDs as expanded by default
-        const allCategoryIds = mainArray.map(category => category.id);
-        setExpandedIds(allCategoryIds);
+      const result: any = await httpService.get('topicsAndCategories');
+      if (Array.isArray(result.categoriesAndTopics)) {
+        setCategoryList(result.categoriesAndTopics);
       } else {
-        console.error('Unexpected API response:', result);
+        console.warn('Expected array in categoriesAndTopics:', result);
       }
     } catch (error) {
-      console.error('Error loading categories and topics:', error);
-      setError('Failed to load categories. Please try again later.');
+      console.error('Error fetching categories and topics:', error);
     }
   };
 
   const handleSearch = (text: string) => {
     setQuery(text);
+
+    if (!text) {
+      setFilterCategoryList([]); // Clear the filtered list if search query is empty
+      return;
+    }
+
+    const filtered = categoryList.reduce((acc: any[], category: any) => {
+      const matchingTopics = category.topicsList.filter((topic: any) =>
+        topic.title.toLowerCase().includes(text.toLowerCase())
+      );
+
+      if (category.title.toLowerCase().includes(text.toLowerCase()) || matchingTopics.length) {
+        acc.push({
+          ...category,
+          topicsList: matchingTopics.length ? matchingTopics : category.topicsList,
+        });
+      }
+      return acc;
+    }, []);
+
+    setFilterCategoryList(filtered);
   };
 
-  const filteredCategories = useMemo(() => {
-    return categories.filter((category: Category) =>
-      category.name.toLowerCase().includes(query.toLowerCase()) ||
-      category.topics.some((topic: Topic) =>
-        typeof topic === 'string' ? topic.toLowerCase().includes(query.toLowerCase()) : topic.title.toLowerCase().includes(query.toLowerCase())
-      )
-    );
-  }, [categories, query]);
+  const selectTopic = (item: any) => {
+    console.log('item', item);
+    const data = { title: item.title, id: item.id }; // Prepare data for navigation
+    navigation.navigate('ViewTopic', data); // Navigate to quiz screen
 
-  const toggleExpand = (id: string) => {
-    setExpandedIds((prevIds) => 
-      prevIds.includes(id) ? prevIds.filter((expandId) => expandId !== id) : [...prevIds, id]
-    );
-  };
+  }
 
-  const renderCategory = ({ item }: { item: Category }) => (
-    <View style={styles.categoryContainer}>
-      <TouchableOpacity onPress={() => toggleExpand(item.id)} style={styles.categoryHeader}>
-        <Text style={styles.categoryName}>{item.name}</Text>
+  const renderTopicItem = ({ item }: any) => (
+    <View style={styles.topicItem}>
+      <TouchableOpacity onPress={() => selectTopic(item)}>
+        <Text style={styles.topicText}>• {item.title}</Text>
       </TouchableOpacity>
+    </View >
+  );
 
-      {expandedIds.includes(item.id) && ( // Change to check against expandedIds
-        <View style={styles.topicsContainer}>
-          {item.topics.length > 0 ? (
-            item.topics.map((topic: any, index: number) => (
-              <Text key={index} style={styles.topicItem}>
-                {typeof topic === 'string' ? topic : topic.title}
-              </Text>
-            ))
-          ) : (
-            <Text style={styles.topicItem}>No topics available</Text>
-          )}
-        </View>
-      )}
+  const renderCategoryItem = ({ item }: any) => (
+    <View style={styles.categoryItem}>
+      <Text style={styles.categoryText}>{item.title}</Text>
+      <FlatList
+        data={item.topicsList}
+        keyExtractor={(topic) => topic.id.toString()}
+        renderItem={renderTopicItem}
+      />
     </View>
   );
 
   return (
-    <View style={globalStyles.mainContainer}>
+    <View style={[globalStyles.mainContainer, { backgroundColor: '#fff' }]}>
       <CommonHeader />
       <View style={globalStyles.padding}>
         <TextInput
@@ -106,17 +90,18 @@ const Search = () => {
           value={query}
           onChangeText={handleSearch}
         />
-        {error && <Text style={styles.errorText}>{error}</Text>}
-        {filteredCategories.length === 0 ? (
-          <Text style={styles.noResultsText}>No results found</Text>
-        ) : (
+
+        {query && filterCategoryList.length > 0 ? (
           <FlatList
-            data={filteredCategories}
-            keyExtractor={(item: Category) => item.id.toString()}
-            renderItem={renderCategory}
-            showsVerticalScrollIndicator={false}
+            data={filterCategoryList}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={renderCategoryItem}
           />
-        )}
+        ) : query ? (
+          <View style={globalStyles.textCenter}>
+            <Text style={globalStyles.textCenter}>No data found</Text>
+          </View>
+        ) : null}
       </View>
     </View>
   );
@@ -125,7 +110,7 @@ const Search = () => {
 const styles = StyleSheet.create({
   searchInput: {
     height: 40,
-    backgroundColor: "white",
+    backgroundColor: 'white',
     borderColor: '#fff',
     borderWidth: 1,
     borderRadius: 5,
@@ -133,43 +118,24 @@ const styles = StyleSheet.create({
     color: '#000',
     marginBottom: 16,
   },
-  categoryContainer: {
-    marginBottom: 10,
-    backgroundColor: '#f0f0f0',
-    borderRadius: 5,
-    padding: 5,
+  categoryItem: {
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
   },
-  categoryName: {
-    fontSize: 16,
+  categoryText: {
+    fontSize: 18,
     fontWeight: 'bold',
-  },
-  topicsContainer: {
-    marginTop: 5,
-    marginStart: 10
+    color: '#333',
   },
   topicItem: {
-    fontSize: 14,
-    marginBottom: 5,
+    paddingLeft: 20,
+    paddingVertical: 5,
   },
-  categoryHeader: {
-    padding: 10,
-    flex: 1,
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    flexDirection: 'row',
-  },
-  errorText: {
-    color: 'red',
-    textAlign: 'center',
-    marginVertical: 10,
-  },
-  noResultsText: {
+  topicText: {
     fontSize: 16,
-    color: '#777',
-    textAlign: 'center',
-    marginTop: 20,
+    color: '#666',
   },
 });
 
 export default Search;
-
