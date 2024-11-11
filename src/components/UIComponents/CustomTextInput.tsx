@@ -17,6 +17,7 @@ const CustomTextInput: React.FC<Props> = ({ name, placeHolder, setName, style, i
         mode="outlined"
         label={placeHolder} // Ensure this is a string
         value={name}
+        theme={{colors:{background:'#fff'}}}
         secureTextEntry={isPasswordField}
         onChangeText={text => setName(text)}
         placeholder={placeHolder} // Ensure this is a string
