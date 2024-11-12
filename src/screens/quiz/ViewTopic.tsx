@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, Image, TouchableOpacity, StyleSheet, Dimensions, RefreshControl, Alert } from 'react-native';
+import { View, Text, ScrollView, Image, TouchableOpacity, StyleSheet, Dimensions, RefreshControl, Alert, ImageBackground } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { globalStyles } from '../../Resources';
@@ -118,50 +118,53 @@ const ViewTopic = ({ route }: any) => {
   };
 
   return (
-    <View style={globalStyles.mainContainer}>
-      <ScrollView style={globalStyles.padding}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }>
-        <View style={globalStyles.topicViewImageContainer}>
-          {topic.localImagePath ? (
-            <Image source={{ uri: `file://${topic.localImagePath}` }} style={globalStyles.topicViewImage} />
-          ) : (
-            topic.image && (
-              <Image source={{ uri: topic.image }} style={globalStyles.topicViewImage} />
-            )
-          )}
-        </View>
-
-        <View style={globalStyles.padding}>
-          <Text style={[globalStyles.h1, globalStyles.themeTextColor, globalStyles.textCenter]}>{topic.title}</Text>
-
-          <Text style={[globalStyles.mTop20, globalStyles.h2, globalStyles.themeTextColor]}>
-            <Icon name="badge-account-horizontal" size={20} color="gold" /> &nbsp;
-            <Text>{topic.categorytitle}</Text>
-          </Text>
-
-          <Text style={[globalStyles.mTop10, globalStyles.normalFont, globalStyles.themeTextColor]}>{topic.description}</Text>
-          <View style={{ justifyContent: 'space-between', flexDirection: 'row' }}>
-            <Text style={[globalStyles.mTop10, globalStyles.h2, globalStyles.themeTextColor]}>
-              Quiz Questions: {topic.questionsLength}
-            </Text>
-            <Text style={[globalStyles.mTop10, globalStyles.h2, globalStyles.themeTextColor]}>
-              Score: {topic.totalScore}
-            </Text>
+    <ImageBackground
+      source={{ uri: `file://${topic.localImagePath}` }} style={globalStyles.topicViewImage}
+      style={globalStyles.mainImageBgContainer}
+      resizeMode="cover"
+    >
+      <View style={globalStyles.overlay}>
+        <ScrollView style={globalStyles.padding}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }>
+          <View style={globalStyles.topicViewImageContainer}>
+            {topic.localImagePath ? (
+              <Image source={{ uri: `file://${topic.localImagePath}` }} style={globalStyles.topicViewImage} />
+            ) : (
+              topic.image && (
+                <Image source={{ uri: topic.image }} style={globalStyles.topicViewImage} />
+              )
+            )}
           </View>
 
-          <View style={globalStyles.bottomEmptySpace}></View>
-        </View>
-      </ScrollView>
+          <View style={[globalStyles.padding, globalStyles.mBottom20]}>
+            <Text style={[globalStyles.h2, globalStyles.themeTextColor, { fontSize: 20 }]}>{topic.title}</Text>
 
-      <View style={[globalStyles.buttomButton, globalStyles.padding, globalStyles.fullWidth, globalStyles.flex]}>
-        <View></View>
-        <TouchableOpacity style={[globalStyles.playButton, globalStyles.textEnd, globalStyles.halfwidth]} onPress={startQuiz}>
-          <Text style={globalStyles.themeTextColor}>Let's Go</Text>
-        </TouchableOpacity>
+            <Text style={[globalStyles.mTop20, globalStyles.h2, globalStyles.themeTextColor]}>
+              <Icon name="badge-account-horizontal" size={20} color="gold" /> &nbsp;
+              <Text>{topic.categorytitle}</Text>
+            </Text>
+            <View style={[{ justifyContent: 'space-between', flexDirection: 'row' }]}>
+              <Text style={[globalStyles.mTop10, globalStyles.h2, globalStyles.themeTextColor]}>
+                Quiz Questions: {topic.questionsLength}
+              </Text>
+              <Text style={[globalStyles.mTop10, globalStyles.h2, globalStyles.themeTextColor]}>
+                Score: {topic.totalScore}
+              </Text>
+            </View>
+            <Text style={[globalStyles.mTop10, globalStyles.normalFont, globalStyles.themeTextColor]}>{topic.description}</Text>
+
+          </View>
+        </ScrollView>
+        <View style={globalStyles.bottomEmptySpace}></View>
+        <View style={[globalStyles.buttomButton, globalStyles.padding, globalStyles.fullWidth]}>
+          <TouchableOpacity style={[globalStyles.borderButton, globalStyles.textCenter, { width: '60%' }]} onPress={startQuiz}>
+            <Text style={globalStyles.themeTextColor}>Let's Go</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-    </View>
+    </ImageBackground>
   );
 };
 

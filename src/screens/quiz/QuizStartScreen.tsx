@@ -88,6 +88,7 @@ const QuizStartScreen = ({ route }: any) => {
     navigation.setOptions({
       title: toolBarTitle,
       headerLeft: () => (''), // Remove back button
+      tabBarStyle: { display: 'none' },
       headerRight: () => (
         <TouchableOpacity onPress={showExitConfirmation} style={globalStyles.headerButton}>
           <Image source={imagesBucket.closeIcon} style={globalStyles.iconImage} />

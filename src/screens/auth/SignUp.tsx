@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { Image, Text, View, StyleSheet, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
-import { Button, TextInput as PaperTextInput } from 'react-native-paper';
+import React, { useState, useEffect } from 'react';
+import { Image, Text, View, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
+import { Button } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch } from 'react-redux';
 import { setIsUserLoggedIn } from '../../redux/slice/AuthSlice';
@@ -13,17 +13,19 @@ import { useLoader } from '../../utils/common/LoaderContext';
 import { useNavigation } from '@react-navigation/native';
 import DropdownComponent from '../../components/DropDown';
 import { loggerService } from '../../utils/CommonUtils';
-import { TextInput } from 'react-native';
-import { GlobalColors } from '../../styles/Colors';
 import CustomTextInput from '../../components/UIComponents/CustomTextInput';
+import { getCountries } from '../../services/sync/countries';
+import { GlobalColors } from '../../styles/Colors';
 
 const SignUp = () => {
-  const navigation: any = useNavigation();
+  const navigation = useNavigation();
   const [fullname, setFullName] = useState('');
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
   const [nickname, setNickName] = useState('');
   const [relationship, setRelationship] = useState('');
+  const [countriesList, setCountriesList] = useState([]);
+  const [selectedCountry, setSelectedCountry] = useState('');
   const [ageGroup, setAgeGroup] = useState('');
   const dispatch = useDispatch();
   const toast = useToast();
@@ -41,6 +43,22 @@ const SignUp = () => {
     { label: 'Divorce', value: 'Divorce' }
   ];
 
+  useEffect(() => {
+    async function fetchCountries() {
+      try {
+        const response = await getCountries();
+        const mappedCountries:any = response.map((country) => ({
+          label: country.name,
+          value: country.name,
+        }));
+        setCountriesList(mappedCountries);
+      } catch (error) {
+        console.error("Error fetching countries:", error);
+      }
+    }
+    fetchCountries();
+  }, []);
+
   const successSignUp = async () => {
     const UserId = '1';
     await AsyncStorage.setItem('UserId', UserId);
@@ -49,7 +67,11 @@ const SignUp = () => {
 
   const signUpClick = async () => {
     showLoader();
-    if (isEmpty(fullname)) {
+    if (isEmpty(selectedCountry)) {
+      showToast('warning', toast, 'Please Select Your Country');
+      hideLoader();
+      return;
+    } else if (isEmpty(fullname)) {
       showToast('warning', toast, 'Please Enter First Name');
       hideLoader();
       return;
@@ -61,150 +83,68 @@ const SignUp = () => {
       showToast('warning', toast, 'Please enter Email Address');
       hideLoader();
       return;
-    }
-    else if (!isValidEmail(email)) {
+    } else if (!isValidEmail(email)) {
       showToast('warning', toast, 'Please enter Valid Email Address');
       hideLoader();
       return;
-    }
-    else if (isEmpty(ageGroup)) {
+    } else if (isEmpty(ageGroup)) {
       showToast('warning', toast, 'Please Select Your Age Group');
       hideLoader();
       return;
-    }
-    else if (isEmpty(relationship)) {
+    } else if (isEmpty(relationship)) {
       showToast('warning', toast, 'Please Select Your Relationship Status');
       hideLoader();
       return;
-    }
-    else if (isEmpty(password)) {
+    } else if (isEmpty(password)) {
       showToast('warning', toast, 'Please enter Password');
       hideLoader();
       return;
     } else {
       const data = {
-        'fullname': fullname,
-        'email': email,
-        'age': ageGroup,
-        'nickname': nickname,
-        'relationship': relationship,
-        'password': password
-      }
-      httpService.post('signup', data).then((response: any) => {
+        fullname,
+        email,
+        age: ageGroup,
+        nickname,
+        relationship,
+        country: selectedCountry,
+        password
+      };
+      try {
+        const response:any = await httpService.post('signup', data);
         hideLoader();
         loggerService('default', 'Signup Response', response);
         showToast('warning', toast, response.message);
         if (response.status) {
           successSignUp();
         }
-      }).catch((error: any) => {
+      } catch (error) {
         loggerService('error', 'Signup Error Response', error);
         hideLoader();
-      });
+      }
     }
   };
-
-  // return (
-  //   <View style={{ backgroundColor: GlobalColors.colors.secondaryBlack, flex: 1, }}>
-  //     <KeyboardAvoidingView style={styles.container}
-  //       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-  //       keyboardVerticalOffset={Platform.OS === 'ios' ? 60 : 0}>
-  //       <ScrollView style={{ flexGrow: 1 }}>
-
-  //         <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' ,}}>
-  //           <Image
-  //             source={imagesBucket.logo}
-  //             resizeMode='center'
-  //             style={authenticationStyles.logoImage}
-
-  //           />
-
-  //           <Text style={[globalStyles.textCenter, globalStyles.h2, globalStyles.caps, globalStyles.mBottom20, globalStyles.themeTextColor]}>
-  //             SIGN UP
-  //           </Text>
-
-  //           <View style={{ flex: 1, justifyContent: 'flex-start', alignItems: 'flex-start', marginHorizontal: 10 }}>
-  //             <PaperTextInput
-  //               style={authenticationStyles.inputText}
-  //               label="First Name"
-  //               onChangeText={setFullName}
-  //               placeholder='First Name'
-  //               value={fullname}
-  //             />
-  //             <PaperTextInput
-  //               style={authenticationStyles.inputText}
-  //               label="Nick Name"
-  //               onChangeText={setNickName}
-  //               placeholder='Nick Name'
-  //               value={nickname}
-  //             />
-  //             <PaperTextInput
-  //               style={authenticationStyles.inputText}
-  //               label="Email Address"
-  //               onChangeText={setEmail}
-  //               placeholder='Email Address'
-  //               value={email}
-  //             />
-  //           </View>
-
-  // <View style={{ width: '95%' }}>
-  //   <DropdownComponent
-  //     data={ageSelectionData}
-  //     label="Age"
-  //     placeholder="Select Age Group"
-  //     onValueChange={(value: string) => setAgeGroup(value)} // Get the selected value back
-  //   />
-  //   <DropdownComponent
-  //     data={relationSelectionData}
-  //     label="RelationShip Status"
-  //     placeholder="Select RelationShip Status"
-  //     onValueChange={(value: string) => setRelationship(value)} // Get the selected value back
-  //   />
-  // </View>
-
-  //           <View style={{ flex: 1, justifyContent: 'flex-start', alignItems: 'flex-start', marginHorizontal: 10 }}>
-  //             <PaperTextInput
-  //               style={authenticationStyles.inputText}
-  //               label="Password"
-  //               onChangeText={setPassword}
-  //               secureTextEntry={true}
-  //               placeholder='Password'
-  //               value={password}
-  //             />
-
-  //           </View>
-
-  //         </View>
-
-  //         <Button style={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginHorizontal: 5, marginTop: 5 }} mode="contained"
-  //           onPress={signUpClick}>Sign Up</Button>
-
-  //         <Text style={[globalStyles.textCenter, globalStyles.p, globalStyles.bold, globalStyles.themeTextColor,{marginTop:10}]}>
-  //           Go Back to <Text style={globalStyles.bold} onPress={() => navigation.navigate('SignIn')}> Sign In</Text>
-  //         </Text>
-
-  //       </ScrollView>
-  //     </KeyboardAvoidingView>
-  //   </View>
-  // );
-
-
-  // New code design (01-11-2024)r
 
   return (
     <KeyboardAvoidingView
       style={globalStyles.container}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0} // Adjust offset as needed
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
     >
+      <View style={globalStyles.imageContainer}>
+        <Image source={imagesBucket.logo} style={globalStyles.image} />
+      </View>
       <ScrollView contentContainerStyle={globalStyles.innerContainer} showsVerticalScrollIndicator={false}>
-        <View style={globalStyles.imageContainer}>
-          <Image
-            source={imagesBucket.logo}
-            style={globalStyles.image}
-          />
-        </View>
 
+        <View style={[{ width: '100%' },globalStyles.mTop20]}>
+          <View style={{ marginTop: 10 }}>
+            <DropdownComponent
+              data={countriesList}
+              label="Country"
+              placeholder="Select Country"
+              onValueChange={(value:any) => setSelectedCountry(value)}
+            />
+          </View>
+        </View>
         <View style={globalStyles.newInputContainer}>
           <CustomTextInput
             name={fullname}
@@ -220,7 +160,6 @@ const SignUp = () => {
             setName={setNickName}
             style={globalStyles.input}
           />
-
           <CustomTextInput
             isPasswordField={false}
             name={email}
@@ -235,14 +174,14 @@ const SignUp = () => {
             data={ageSelectionData}
             label="Age"
             placeholder="Select Age Group"
-            onValueChange={(value: string) => setAgeGroup(value)} // Get the selected value back
+            onValueChange={(value:any) => setAgeGroup(value)}
           />
           <View style={{ marginTop: 10 }}>
             <DropdownComponent
               data={relationSelectionData}
               label="RelationShip Status"
               placeholder="Select RelationShip Status"
-              onValueChange={(value: string) => setRelationship(value)} // Get the selected value back
+              onValueChange={(value:any) => setRelationship(value)}
             />
           </View>
         </View>
@@ -267,17 +206,13 @@ const SignUp = () => {
           </Button>
         </View>
 
-        <View style={{ marginTop: 20 }}>
+        <View style={[{ marginTop: 10 },globalStyles.mBottom20]}>
           <Text style={[globalStyles.textCenter, globalStyles.p, { color: GlobalColors.colors.black }]}>
-            Go Back to <Text style={globalStyles.bold} onPress={() => navigation.navigate('SignIn')}> Sign In
-            </Text>
+            Go Back to <Text style={globalStyles.bold} onPress={() => navigation.navigate('SignIn')}>Sign In</Text>
           </Text>
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
   );
-
 };
-
 export default SignUp;
-

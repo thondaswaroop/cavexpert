@@ -437,7 +437,7 @@ export const globalStyles = StyleSheet.create({
         padding: 20,
     },
     bottomEmptySpace: {
-        height: 100
+        height: 80
     },
     fab: {
         position: 'absolute',

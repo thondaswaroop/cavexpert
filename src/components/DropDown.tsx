@@ -1,46 +1,49 @@
 // DropdownComponent.tsx
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 import { GlobalColors } from '../styles/Colors';
 import { globalStyles } from '../Resources';
 
-const DropdownComponent = ({ data, label, placeholder, onValueChange }: any) => {
-    const [value, setValue] = useState(null);
+const DropdownComponent = ({ data, label, placeholder, onValueChange, value }: any) => {
+    const [selectedValue, setSelectedValue] = useState(value || null);
     const [isFocus, setIsFocus] = useState(false);
-    const [dropdDownData, setDropdDownData] = useState([{ label: 'Select Age Range', value: '' }, ...data]);
+    const [dropdownData, setDropdownData] = useState([{ label: 'Select Age Range', value: '' }, ...data]);
+
+    useEffect(() => {
+        setDropdownData([{ label: 'Select Age Range', value: '' }, ...data]);
+        setSelectedValue(value);  // Update selected value when prop changes
+    }, [data, value]);
 
     const handleChange = (item: any) => {
-        setValue(item.value);
+        setSelectedValue(item.value);
         setIsFocus(false);
         onValueChange(item.value); // Send the selected value back to the parent component
     };
 
-    useEffect(() => {
-        // Update dropdown data if the prop changes
-        setDropdDownData([{ label: 'Select Age Range', value: '' }, ...data]);
-    }, [data]);
-
     return (
         <View style={[globalStyles.fullWidth, globalStyles.mBottom20]}>
-            {/* <Text style={{ color: GlobalColors.colors.white,alignItems:'flex-start' }}>{label}</Text> */}
             <Dropdown
-                style={[styles.dropdown, isFocus ? { borderColor: GlobalColors.colors.primaryColor }:{borderColor: GlobalColors.colors.lightGrey}]}
+                style={[
+                    styles.dropdown,
+                    isFocus ? { borderColor: GlobalColors.colors.primaryColor } : { borderColor: GlobalColors.colors.lightGrey }
+                ]}
                 placeholderStyle={styles.placeholderStyle}
                 selectedTextStyle={styles.selectedTextStyle}
                 inputSearchStyle={styles.inputSearchStyle}
                 iconStyle={styles.iconStyle}
-                data={dropdDownData}
+                data={dropdownData}
                 search
                 maxHeight={300}
                 labelField="label"
                 valueField="value"
                 placeholder={!isFocus ? placeholder : '...'}
                 searchPlaceholder="Search..."
-                value={value}
+                value={selectedValue}  // Set the initial value for the dropdown
                 onFocus={() => setIsFocus(true)}
                 onBlur={() => setIsFocus(false)}
                 onChange={handleChange}
+                dropdownPosition="auto"
             />
         </View>
     );

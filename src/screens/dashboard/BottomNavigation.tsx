@@ -16,7 +16,7 @@ const Stack = createNativeStackNavigator();
 
 const HomeNavigation = () => {
     return (
-        <Stack.Navigator>
+        <Stack.Navigator initialRouteName='HomeScreen'>
             <Stack.Screen name="HomeScreen" component={HomeScreen} options={{ headerShown: false }} />
             <Stack.Screen name="Categories" component={CategoryScreen} />
             <Stack.Screen name="ViewTopic" component={ViewTopic} />
@@ -29,7 +29,7 @@ const HomeNavigation = () => {
 
 const SearchNavigation = () => {
     return (
-        <Stack.Navigator >
+        <Stack.Navigator initialRouteName='SearchMain'>
             <Stack.Screen name="SearchMain" component={Search} options={{ headerShown: false }} />
             <Stack.Screen name="Categories" component={CategoryScreen} />
             <Stack.Screen name="ViewTopic" component={ViewTopic} />
@@ -42,9 +42,9 @@ const SearchNavigation = () => {
 
 const ProfileNavigation = () => {
     return (
-        <Stack.Navigator >
+        <Stack.Navigator initialRouteName='ProfileMain'>
             <Stack.Screen name="ProfileMain" component={Profile} options={{ headerShown: false }} />
-            <Stack.Screen name="EditProfile" component={EditProfile} options={{ headerShown: false }} />
+            <Stack.Screen name="EditProfile" component={EditProfile} options={{ headerShown: true,headerTitle:'Edit Your Profile' }} />
         </Stack.Navigator>
     );
 };

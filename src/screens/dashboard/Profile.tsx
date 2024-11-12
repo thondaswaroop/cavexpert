@@ -99,8 +99,8 @@ const Profile = () => {
   const shareResult = () => {
     socialShare(
       AppEnvironment.MainLogo,
-      '🚀 Unlock Your Best Self with caveXpert! 🚀',
-      'Guys, ready to level up your dating game? 💪 "caveXpert" is here to help you understand yourself better, learn what it takes to attract women, and build real, lasting relationships. Dive into quizzes, read insightful stories, and become a top learner on our leaderboard! 🏆 \n\n Download the app now, start your journey, and show the world that you are ready for what comes next. 📲✨ \n\n Download caveXpert & Start Your Journey!',
+      '🚀 Level Up Your Dating Game with caveXpert! 🚀',
+      'Guys, are you ready to level up your dating game? 💪 "caveXpert" is here to help you understand yourself better, learn what it takes to attract the woman of your dreams, and build real, lasting relationships. Dive into quizzes, read insightful stories, and become a top learner on our leaderboard! 🏆  \n\n Download the app now, start your journey, and show her that you are ready for what comes next. 😉🔥 \n\n Download caveXpert & Start Your Journey!',
       AppEnvironment.StoreLink
     );
   };
@@ -120,7 +120,7 @@ const Profile = () => {
 
   const editProfile = () => {
     // Navigate to the Edit Profile screen or handle edit profile logic
-    // navigation.navigate('EditProfile'); // Ensure 'EditProfile' is a valid screen in your navigator
+    navigation.navigate('EditProfile'); // Ensure 'EditProfile' is a valid screen in your navigator
   };
 
 
@@ -186,7 +186,7 @@ const Profile = () => {
             <View style={styles.modalContainer}>
               <View style={styles.modalHeader}>
                 <View style={globalStyles.flex}>
-                  <Text style={[globalStyles.h2, globalStyles.mTop10]}>Select Your Avatars</Text>
+                  <Text style={[globalStyles.h2, globalStyles.mTop10]}>Select Your Avatar</Text>
                   <IconButton
                     icon="close" // You can use the "close" icon or any other from your icon set
                     size={20}
@@ -258,6 +258,9 @@ const Profile = () => {
                     size={100}
                     style={styles.image}
                   />
+                  <View style={{position:'absolute',bottom:5,right:'10%',backgroundColor:GlobalColors.colors.primaryColor,borderRadius:50,padding:5}}>
+                    <Icon source="pencil" color={GlobalColors.colors.white} size={20} />
+                  </View>
                 </TouchableOpacity>
                 <View
                   style={{
@@ -270,7 +273,7 @@ const Profile = () => {
                   <Text style={[globalStyles.h2, globalStyles.caps]}>
                     {userData.fullname} {/* Use fetched user name */}
                   </Text>
-                  <Text style={[globalStyles.smallFont, globalStyles.caps]}>
+                  <Text style={[globalStyles.smallFont]}>
                     {userData.email} {/* Use fetched user email */}
                   </Text>
 

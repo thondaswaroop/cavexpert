@@ -122,7 +122,7 @@ const ExplanationModal = ({ visible, onClose, explanation, link, story, result, 
                         </View>
                     </ScrollView>
 
-                    <TouchableOpacity onPress={onContinue} style={styles.continueButton}>
+                    <TouchableOpacity onPress={onContinue} style={globalStyles.borderButton}>
                         <Text style={styles.continueButtonText}>Continue</Text>
                     </TouchableOpacity>
                 </View>

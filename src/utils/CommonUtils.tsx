@@ -32,7 +32,7 @@ const socialShare = async (image:any, text1:any, text2:any, link:any) => {
         const shareOptions = {
             title: text1,
             message: `${text1}\n\n${text2}\n\nGet the app here: ${link}\n`,
-            url: image, // The image URL
+            // url: image, // The image URL
         };
 
         const result:any = await Share.open(shareOptions);

@@ -135,8 +135,8 @@ const QuizResultsScreen = ({ route, navigation }: any) => {
     const shareResult = () => {
         socialShare(
             AppEnvironment.MainLogo,
-            '🚀 I just leveled up in "caveXpert"! 🚀',
-            "I scored " + score + " points in the latest quiz about Attracting the Right Person! 📚💡With " + correctAnswers + " correct answers, I'm learning how to understand myself better and become the best version of me. 💪 \n\n Think you can beat my score? 🏆 Join me in caveXpert and discover what it takes to attract the right people into your life and build real, lasting relationships. \n\n ❤️ Click the link to download the app and start your journey now: [https://play.google.com/store/apps/details?id=com.whatsapp] \n 📲 Download caveXpert and challenge yourself today!",
+            '🚀 I just levelled up in "caveXpert"! 🚀',
+            "I scored " + score + " points in the latest quiz about Attracting the Right Person! 📚💡With " + correctAnswers + " correct answers, I'm learning how to understand myself better and become the best version of me. 💪 \n\n Do you think you can beat my score? 🏆 Join me in caveXpert and discover what it takes to attract the woman of your dreams into your life and build a real, lasting relationship with her. 😉 \n\n ❤ Click the link to download the app and start your journey now: ["+AppEnvironment.StoreLink+"] \n 📲 Download caveXpert and challenge yourself today!",
             AppEnvironment.StoreLink
         );
     }

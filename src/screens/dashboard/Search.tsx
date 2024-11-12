@@ -10,7 +10,7 @@ const Search = () => {
   const [query, setQuery] = useState('');
   const [categoryList, setCategoryList] = useState<any>([]);
   const [filterCategoryList, setFilterCategoryList] = useState<any>([]);
-  const navigation: any = useNavigation(); // Navigation hook
+  const navigation: any = useNavigation();
 
   useEffect(() => {
     fetchCategoriesTopics();
@@ -55,10 +55,8 @@ const Search = () => {
   };
 
   const selectTopic = (item: any) => {
-    console.log('item', item);
-    const data = { title: item.title, id: item.id }; // Prepare data for navigation
-    navigation.navigate('ViewTopic', data); // Navigate to quiz screen
-
+    const data = { title: item.title, id: item.id };
+    navigation.navigate('ViewTopic', data);
   }
 
   const renderTopicItem = ({ item }: any) => (
@@ -83,7 +81,7 @@ const Search = () => {
   return (
     <View style={[globalStyles.mainContainer, { backgroundColor: '#fff' }]}>
       <CommonHeader />
-      <View style={globalStyles.padding}>
+      <View style={[globalStyles.padding, globalStyles.mBottom20]}>
         <TextInput
           style={styles.searchInput}
           placeholder="Search..."
@@ -91,15 +89,24 @@ const Search = () => {
           onChangeText={handleSearch}
         />
 
+        {/* Empty state when no query is entered */}
+        {query === '' && (
+          <View style={globalStyles.textCenter}>
+            <Text style={[globalStyles.textCenter,globalStyles.topicViewImageContainer]}>Find your favourite topics </Text>
+          </View>
+        )}
+
+        {/* Display filtered categories or a message for no results */}
         {query && filterCategoryList.length > 0 ? (
           <FlatList
             data={filterCategoryList}
             keyExtractor={(item) => item.id.toString()}
             renderItem={renderCategoryItem}
+            contentContainerStyle={{ paddingBottom: 20 }}
           />
         ) : query ? (
           <View style={globalStyles.textCenter}>
-            <Text style={globalStyles.textCenter}>No data found</Text>
+            <Text>No results found</Text>
           </View>
         ) : null}
       </View>
@@ -122,6 +129,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderBottomWidth: 1,
     borderBottomColor: '#ccc',
+    marginBottom: 10,
   },
   categoryText: {
     fontSize: 18,
