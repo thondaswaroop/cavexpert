@@ -54,7 +54,7 @@ const SignIn = () => {
 
     try {
       const response: any = await httpService.post('signin', data);
-      loggerService('default', 'Sigin Response', data);
+      loggerService('default', 'Sigin Response', response);
       showToast('warning', toast, response.message);
       if (response.status) {
         successLogin(response.userinfo);

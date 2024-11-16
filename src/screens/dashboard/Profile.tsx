@@ -126,7 +126,8 @@ const Profile = () => {
 
 
   const onScreenFocus = useCallback(() => {
-    getUserInfo();
+    getUserInfo(); // Call the function to fetch user profile
+    getUserLeaderBoard();
   }, []);
 
   useFocusEffect(onScreenFocus);
@@ -134,19 +135,21 @@ const Profile = () => {
   const renderUserIcon = (userIcon: any) => {
     switch (userIcon) {
       case '1':
-        return imagesBucket.userIcon1;
+        return imagesBucket.icon1;
       case '2':
-        return imagesBucket.userIcon2;
+        return imagesBucket.userIcon1;
       case '3':
-        return imagesBucket.userIcon3;
+        return imagesBucket.userIcon2;
       case '4':
-        return imagesBucket.userIcon4;
+        return imagesBucket.userIcon3;
       case '5':
-        return imagesBucket.userIcon5;
+        return imagesBucket.userIcon4;
       case '6':
+        return imagesBucket.userIcon5;
+      case '7':
         return imagesBucket.userIcon6;
       default:
-        return imagesBucket.userIcon6;
+        return imagesBucket.icon1;
     }
   };
 
@@ -196,13 +199,6 @@ const Profile = () => {
                 </View>
               </View>
               <View style={styles.avatarContainer}>
-                <TouchableOpacity onPress={() => selectUserIcon('1')}>
-                  <Avatar.Image
-                    source={renderUserIcon('1')} // Use fetched profile image
-                    size={100}
-                    style={styles.avatarImage}
-                  />
-                </TouchableOpacity>
                 <TouchableOpacity onPress={() => selectUserIcon('2')}>
                   <Avatar.Image
                     source={renderUserIcon('2')} // Use fetched profile image
@@ -238,6 +234,13 @@ const Profile = () => {
                     style={styles.avatarImage}
                   />
                 </TouchableOpacity>
+                <TouchableOpacity onPress={() => selectUserIcon('7')}>
+                  <Avatar.Image
+                    source={renderUserIcon('7')} // Use fetched profile image
+                    size={100}
+                    style={styles.avatarImage}
+                  />
+                </TouchableOpacity>
               </View>
             </View>
           </View>
@@ -258,7 +261,7 @@ const Profile = () => {
                     size={100}
                     style={styles.image}
                   />
-                  <View style={{position:'absolute',bottom:5,right:'10%',backgroundColor:GlobalColors.colors.primaryColor,borderRadius:50,padding:5}}>
+                  <View style={{ position: 'absolute', bottom: 5, right: '10%', backgroundColor: GlobalColors.colors.primaryColor, borderRadius: 50, padding: 5 }}>
                     <Icon source="pencil" color={GlobalColors.colors.white} size={20} />
                   </View>
                 </TouchableOpacity>

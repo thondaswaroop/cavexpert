@@ -5,6 +5,7 @@ import { Alert, Button, View, Dimensions, StyleSheet, Linking } from 'react-nati
 import { globalStyles } from '../Resources';
 import { ImageSlider } from 'react-native-image-slider-banner';
 import { loggerService } from '../utils/CommonUtils';
+import { AppEnvironment } from '../constants/Global';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -38,7 +39,7 @@ const ImageSlideArea: React.FC<ImageSlideAreaProps> = ({ images, isOffline, bann
   return (
     <View>
       <ImageSlider
-        data={displayImages.length > 0 ? displayImages : [{ img: 'https://pmgstechnology.com/projects/caveXpert/images/logo.png' }]}
+        data={displayImages.length > 0 ? displayImages : [{ img: AppEnvironment.BaseUrl+'images/logo.png' }]}
         autoPlay={true}
         timer={4000}
         onClick={(images, index) => clickImage(images, index)}
