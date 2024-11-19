@@ -59,8 +59,9 @@ const SignUp = () => {
     fetchCountries();
   }, []);
 
-  const successSignUp = async () => {
-    const UserId = '1';
+  const successSignUp = async (userResponse: any) => {
+
+    const UserId = userResponse.id;
     await AsyncStorage.setItem('UserId', UserId);
     dispatch(setIsUserLoggedIn(true));
   };
@@ -115,7 +116,7 @@ const SignUp = () => {
         loggerService('default', 'Signup Response', response);
         showToast('warning', toast, response.message);
         if (response.status) {
-          successSignUp();
+          successSignUp(response.userinfo);
         }
       } catch (error) {
         loggerService('error', 'Signup Error Response', error);
@@ -180,7 +181,7 @@ const SignUp = () => {
             <DropdownComponent
               data={relationSelectionData}
               label="RelationShip Status"
-              placeholder="Select RelationShip Status"
+              placeholder="Select Relationship Status"
               onValueChange={(value:any) => setRelationship(value)}
             />
           </View>

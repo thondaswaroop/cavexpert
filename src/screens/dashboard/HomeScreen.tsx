@@ -157,9 +157,9 @@ const HomeScreen = () => {
             loggerService('error', 'Rank Information Error', error);
 
             // If there's an error, try to load the last saved rank from local storage
-            const savedRank = await AsyncStorage.getItem('UserRank');
-            if (savedRank) {
-                const { rank, todayScore, overallScore } = JSON.parse(savedRank);
+            const savedRank:any = await AsyncStorage.getItem('UserRank');
+            const { rank, todayScore, overallScore } = JSON.parse(savedRank);
+            if (!rank) {
                 setUserRank(rank);
                 setTodayScore(todayScore);
                 setOverallScore(overallScore);

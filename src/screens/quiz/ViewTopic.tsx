@@ -10,6 +10,7 @@ import { loggerService } from '../../utils/CommonUtils';
 import NetInfo from '@react-native-community/netinfo';
 import { createTables, getQuestionsByTopicId, getTopicById, insertQuestions, insertTopic } from '../../services/sqlite/SQLiteService';
 import { downloadImage } from '../../services/ImageService';
+import { GlobalColors } from '../../styles/Colors';
 
 const { width } = Dimensions.get('window');
 
@@ -23,7 +24,10 @@ const ViewTopic = ({ route }: any) => {
 
   useEffect(() => {
     navigation.setOptions({
-      title: title,
+      title: title,headerStyle: {
+        backgroundColor: GlobalColors.colors.themeBlack, // Set toolbar background color
+    },
+    headerTintColor: GlobalColors.colors.white
     });
     getTopic();
   }, [title]);

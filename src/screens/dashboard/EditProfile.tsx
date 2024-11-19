@@ -188,7 +188,7 @@ const EditProfile = () => {
                 <DropdownComponent
                   data={relationSelectionData}
                   label="RelationShip Status"
-                  placeholder="Select RelationShip Status"
+                  placeholder="Select Relationship Status"
                   onValueChange={(value: any) => setRelationship(value)}
                   value={relationship}  // Pass the initial value here
                 />

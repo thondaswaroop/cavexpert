@@ -11,7 +11,7 @@ const DropdownComponent = ({ data, label, placeholder, onValueChange, value }: a
     const [dropdownData, setDropdownData] = useState([{ label: 'Select Age Range', value: '' }, ...data]);
 
     useEffect(() => {
-        setDropdownData([{ label: 'Select Age Range', value: '' }, ...data]);
+        setDropdownData([{ label: placeholder, value: '' }, ...data]);
         setSelectedValue(value);  // Update selected value when prop changes
     }, [data, value]);
 
@@ -55,6 +55,7 @@ const styles = StyleSheet.create({
         width: '100%',
         backgroundColor: '#eee',
         borderColor: GlobalColors.colors.black,
+        color: GlobalColors.colors.black,
         borderWidth: 0.5,
         borderRadius: 3,
         paddingHorizontal: 8,
@@ -74,6 +75,7 @@ const styles = StyleSheet.create({
     inputSearchStyle: {
         height: 40,
         fontSize: 16,
+        color: GlobalColors.colors.black
     },
 });
 

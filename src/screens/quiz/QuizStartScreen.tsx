@@ -9,6 +9,7 @@ import { loggerService } from '../../utils/CommonUtils';
 import ExplanationModal from '../../components/ExplanationModal';
 import NetInfo from '@react-native-community/netinfo';
 import { insertQuestions, getQuestionsByTopicId } from '../../services/sqlite/SQLiteService';
+import { GlobalColors } from '../../styles/Colors';
 
 const QuizStartScreen = ({ route }: any) => {
   const { title, id } = route.params;
@@ -86,7 +87,10 @@ const QuizStartScreen = ({ route }: any) => {
       toolBarTitle = title.substring(0, 30) + '..';
     }
     navigation.setOptions({
-      title: toolBarTitle,
+      title: toolBarTitle, headerStyle: {
+        backgroundColor: GlobalColors.colors.themeBlack, // Set toolbar background color
+      },
+      headerTintColor: GlobalColors.colors.white,
       headerLeft: () => (''), // Remove back button
       tabBarStyle: { display: 'none' },
       headerRight: () => (
@@ -203,16 +207,35 @@ const QuizStartScreen = ({ route }: any) => {
 
   useFocusEffect(
     useCallback(() => {
-      const onBackPress = () => {
-        showExitConfirmation();
-        return true;
-      };
+        // Define the function for back press behavior
+        const onBackPress = () => {
+            showExitConfirmation();
+            return true; // Prevent default back behavior
+        };
 
-      BackHandler.addEventListener('hardwareBackPress', onBackPress);
+        // Hide the bottom tab bar when this screen is focused
+        navigation.getParent()?.setOptions({
+            tabBarStyle: { display: 'none' } // Hide only the tab bar, preserve other styles
+        });
 
-      return () => BackHandler.removeEventListener('hardwareBackPress', onBackPress);
-    }, [])
-  );
+        // Add back button listener
+        BackHandler.addEventListener('hardwareBackPress', onBackPress);
+
+        // Cleanup when the screen loses focus
+        return () => {
+            // Restore the tab bar when the screen is no longer focused, maintaining its styles
+            navigation.getParent()?.setOptions({
+                tabBarStyle: { display: 'flex', backgroundColor: '#404040' } // Ensure background color is preserved
+            });
+
+            // Remove the back button listener
+            BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+        };
+    }, [navigation]) // Re-run the effect if the navigation object changes
+);
+
+
+
 
   const currentQuestion = questions[currentQuestionIndex];
 
@@ -227,49 +250,49 @@ const QuizStartScreen = ({ route }: any) => {
       resizeMode="cover"
     >
       <View style={globalStyles.overlay}>
-      <ScrollView style={globalStyles.padding}>
-        <View style={globalStyles.padding}>
-          <View style={[globalStyles.content, globalStyles.mTop10]}>
-            <View style={{ justifyContent: 'space-between', flexDirection: 'row' }}>
-              <View style={globalStyles.mBottom20}>
-                {/* <Text style={[globalStyles.h1, globalStyles.themeTextColor]}>
+        <ScrollView style={globalStyles.padding}>
+          <View style={globalStyles.padding}>
+            <View style={[globalStyles.content, globalStyles.mTop10]}>
+              <View style={{ justifyContent: 'space-between', flexDirection: 'row' }}>
+                <View style={globalStyles.mBottom20}>
+                  {/* <Text style={[globalStyles.h1, globalStyles.themeTextColor]}>
                     {score} 🪙
                   </Text> */}
+                </View>
+                <View style={globalStyles.mBottom20}>
+                  <Text style={[globalStyles.h1, globalStyles.themeTextColor]}>
+                    {score} 🪙
+                  </Text>
+                </View>
               </View>
-              <View style={globalStyles.mBottom20}>
-                <Text style={[globalStyles.h1, globalStyles.themeTextColor]}>
-                  {score} 🪙
-                </Text>
-              </View>
-            </View>
 
-            <QuestionComponent
-              question={currentQuestion.title}
-              options={currentQuestion.options}
-              selectedAnswer={selectedAnswer}
-              onSelectAnswer={handleAnswerSelect}
-              feedback={feedback}
-              questionInfo={currentQuestion}
-              currentQuestionIndex={currentQuestionIndex}
-              totalQuestions={questions.length}
-            />
-            <View style={globalStyles.mTop20}>
-              <TouchableOpacity onPress={handleNextQuestion} style={globalStyles.borderButton}>
-                <Text style={[globalStyles.smallButtonText,globalStyles.themeTextColor]}>NEXT</Text>
-              </TouchableOpacity>
+              <QuestionComponent
+                question={currentQuestion.title}
+                options={currentQuestion.options}
+                selectedAnswer={selectedAnswer}
+                onSelectAnswer={handleAnswerSelect}
+                feedback={feedback}
+                questionInfo={currentQuestion}
+                currentQuestionIndex={currentQuestionIndex}
+                totalQuestions={questions.length}
+              />
+              <View style={globalStyles.mTop20}>
+                <TouchableOpacity onPress={handleNextQuestion} style={globalStyles.borderButton}>
+                  <Text style={[globalStyles.smallButtonText, globalStyles.themeTextColor]}>NEXT</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
-        </View>
 
-        <ExplanationModal
-          visible={modalVisible}
-          link={link}
-          onClose={() => setModalVisible(false)}
-          explanation={explanation}
-          story={story}
-          result={answerResult}
-          onContinue={handleContinue}
-        />
+          <ExplanationModal
+            visible={modalVisible}
+            link={link}
+            onClose={() => setModalVisible(false)}
+            explanation={explanation}
+            story={story}
+            result={answerResult}
+            onContinue={handleContinue}
+          />
         </ScrollView>
       </View>
     </ImageBackground>

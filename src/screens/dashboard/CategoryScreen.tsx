@@ -8,6 +8,7 @@ import { loggerService } from '../../utils/CommonUtils';
 import NetInfo from '@react-native-community/netinfo';
 import { createTables,  getTopics, insertTopic } from '../../services/sqlite/SQLiteService';
 import { downloadImage } from '../../services/ImageService';
+import { GlobalColors } from '../../styles/Colors';
 
 // Component definition
 const CategoryScreen = ({ route }: any) => {
@@ -20,7 +21,10 @@ const CategoryScreen = ({ route }: any) => {
 
     // Effect hook for initializing the screen
     useEffect(() => {
-        navigation.setOptions({ title }); // Set screen title
+        navigation.setOptions({ title,headerStyle: {
+            backgroundColor: GlobalColors.colors.themeBlack, // Set toolbar background color
+        },
+        headerTintColor: GlobalColors.colors.white }); // Set screen title
         initializeScreen(); // Call function to initialize screen data
     }, [title]);
 

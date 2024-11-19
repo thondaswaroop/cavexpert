@@ -461,7 +461,7 @@ export const globalStyles = StyleSheet.create({
         height: 20,
         marginTop: 5,
         alignItems: 'center',
-        tintColor: GlobalColors.colors.black,
+        tintColor: GlobalColors.colors.white,
         resizeMode: 'center'
     },
     quizButtomButton: {

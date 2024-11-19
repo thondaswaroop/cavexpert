@@ -8,6 +8,7 @@ export const GlobalColors = {
       primaryBlack: '#201E1E',
       // secondaryBlack: '#232020',
       secondaryBlack: '#000',
+      themeBlack:'#404040',
 
       chatIconsColor: '#AFBBC6',
       secondaryTextColour: '#FFF7D3',
