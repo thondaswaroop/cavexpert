@@ -31,7 +31,7 @@ const socialShare = async (image:any, text1:any, text2:any, link:any) => {
     try {
         const shareOptions = {
             title: text1,
-            message: `${text1}\n\n${text2}\n\nGet the app here: ${link}\n`,
+            message: `${text1}\n\n${text2}\n\nGet the app here: \n 👇👇👇 \n ${link}\n`,
             // url: image, // The image URL
         };
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { globalStyles } from '../../Resources';
@@ -18,6 +18,13 @@ const ReviewAnswersScreen = ({ route }: any) => {
         const data: any = { 'title': title, id: id };
         navigation.navigate('ViewTopic', data);
     };
+
+    useEffect(() => {
+        navigation.setOptions({ title:'Review Answers',headerStyle: {
+            backgroundColor: GlobalColors.colors.themeBlack, // Set toolbar background color
+        },
+        headerTintColor: GlobalColors.colors.white }); // Set screen title
+    }, []);
 
     return (
         <View style={globalStyles.mainContainer}>

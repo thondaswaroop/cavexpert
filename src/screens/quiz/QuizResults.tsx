@@ -44,6 +44,10 @@ const QuizResultsScreen = ({ route, navigation }: any) => {
     useEffect(() => {
         navigation.setOptions({
             title: 'Quiz Completed!',
+            headerStyle: {
+                backgroundColor: GlobalColors.colors.themeBlack, // Set toolbar background color
+            },
+            headerTintColor: GlobalColors.colors.white,
             headerLeft: () => (''), // Empty header left (can customize as needed)
             headerRight: () => (
                 <TouchableOpacity onPress={showExitConfirmation} style={globalStyles.headerButton}>
