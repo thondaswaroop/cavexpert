@@ -47,7 +47,7 @@ const SignUp = () => {
     async function fetchCountries() {
       try {
         const response = await getCountries();
-        const mappedCountries:any = response.map((country) => ({
+        const mappedCountries: any = response.map((country) => ({
           label: country.name,
           value: country.name,
         }));
@@ -111,7 +111,7 @@ const SignUp = () => {
         password
       };
       try {
-        const response:any = await httpService.post('signup', data);
+        const response: any = await httpService.post('signup', data);
         hideLoader();
         loggerService('default', 'Signup Response', response);
         showToast('warning', toast, response.message);
@@ -136,13 +136,14 @@ const SignUp = () => {
       </View>
       <ScrollView contentContainerStyle={globalStyles.innerContainer} showsVerticalScrollIndicator={false}>
 
-        <View style={[{ width: '100%' },globalStyles.mTop20]}>
+        <View style={[{ width: '100%' }, globalStyles.mTop20]}>
           <View style={{ marginTop: 10 }}>
             <DropdownComponent
               data={countriesList}
               label="Country"
               placeholder="Select Country"
-              onValueChange={(value:any) => setSelectedCountry(value)}
+              onValueChange={setSelectedCountry} // Update parent state
+              value={selectedCountry} // Controlled value from parent state
             />
           </View>
         </View>
@@ -175,14 +176,16 @@ const SignUp = () => {
             data={ageSelectionData}
             label="Age"
             placeholder="Select Age Group"
-            onValueChange={(value:any) => setAgeGroup(value)}
+            onValueChange={setAgeGroup} // Update parent state
+            value={ageGroup} // Controlled value from parent state
           />
           <View style={{ marginTop: 10 }}>
             <DropdownComponent
               data={relationSelectionData}
-              label="RelationShip Status"
+              label="Relationship Status"
               placeholder="Select Relationship Status"
-              onValueChange={(value:any) => setRelationship(value)}
+              onValueChange={setRelationship} // Update parent state
+              value={relationship} // Controlled value from parent state
             />
           </View>
         </View>
@@ -207,7 +210,7 @@ const SignUp = () => {
           </Button>
         </View>
 
-        <View style={[{ marginTop: 10 },globalStyles.mBottom20]}>
+        <View style={[{ marginTop: 10 }, globalStyles.mBottom20]}>
           <Text style={[globalStyles.textCenter, globalStyles.p, { color: GlobalColors.colors.black }]}>
             Go Back to <Text style={globalStyles.bold} onPress={() => navigation.navigate('SignIn')}>Sign In</Text>
           </Text>

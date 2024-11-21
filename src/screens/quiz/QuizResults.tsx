@@ -140,7 +140,7 @@ const QuizResultsScreen = ({ route, navigation }: any) => {
         socialShare(
             AppEnvironment.MainLogo,
             '🚀 I just levelled up in "caveXpert"! 🚀',
-            "I scored " + score + " points in the latest quiz about "+title+" 📚💡With " + correctAnswers + " correct answers, I'm learning how to understand myself better and become the best version of me. 💪 \n\n Do you think you can beat my score? 🏆 Challenge me in the caveXpert app and discover "+title+". 😉 \n\n ❤ Click the link to download the app and start your journey now: ["+AppEnvironment.StoreLink+"] \n 📲 Download caveXpert and challenge yourself today!",
+            "I scored " + score + " points in the latest quiz about "+title+" 📚💡With " + correctAnswers + " correct answers, I'm learning how to understand myself better and become the best version of me. 💪 \n\n Do you think you can beat my score? 🏆 Challenge me in the caveXpert app and discover "+title+". 😉 \n\n 📲 Download caveXpert and challenge yourself today!",
             AppEnvironment.StoreLink
         );
     }

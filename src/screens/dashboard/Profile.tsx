@@ -102,7 +102,7 @@ const Profile = () => {
     socialShare(
       AppEnvironment.MainLogo,
       '🚀 Level Up Your Dating Game with caveXpert! 🚀',
-      'Guys, are you ready to level up your dating game? 💪 "caveXpert" is here to help you understand yourself better, learn what it takes to attract the woman of your dreams, and build real, lasting relationships. Dive into quizzes, read insightful stories, and become a top learner on our leaderboard! 🏆  \n\n Download the app now, start your journey, and show her that you are ready for what comes next. 😉🔥 \n\n Download caveXpert & Start Your Journey!',
+      'Guys, are you ready to level up your dating game? 💪 "caveXpert" is here to help you understand yourself better, learn what it takes to attract the woman of your dreams, and build real, lasting relationships. Dive into quizzes, read insightful stories, and become a top learner on our leaderboard! 🏆  \n\n 📲 Download the app now, start your journey, and show her that you are ready for what comes next. 😉🔥 \n\n Download caveXpert & Start Your Journey!',
       AppEnvironment.StoreLink
     );
   };
