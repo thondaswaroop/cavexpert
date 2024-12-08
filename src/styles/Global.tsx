@@ -35,7 +35,7 @@ export const globalStyles = StyleSheet.create({
         marginVertical: 20,
     },
     topicViewImage: {
-        width: '40%',
+        width: '50%',
         height: 300,
         borderRadius: 8,
     },

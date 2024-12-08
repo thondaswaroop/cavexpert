@@ -128,7 +128,7 @@ const CategoryScreen = ({ route }: any) => {
                         >
                             <Image
                                 source={{ uri: isOffline && topic.localImagePath ? `file://${topic.localImagePath}` : topic.image }}
-                                style={{ height: 300, borderRadius: 8 }}
+                                style={{ height: 280, borderRadius: 8 }}
                                 onError={(error) => console.log('Image Load Error:', error.nativeEvent.error)}
                             />
                             <View style={globalStyles.mTop10}>

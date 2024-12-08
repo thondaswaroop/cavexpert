@@ -8,6 +8,7 @@ import {
   View,
   TouchableOpacity,
   ScrollView,
+  Linking,
 } from 'react-native';
 import CommonHeader from '../../components/Header';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -33,6 +34,8 @@ const Profile = () => {
   const [todayScore, setTodayScore] = useState(0);
   const [overallScore, setOverallScore] = useState(0);
   const [selectAvatarSelection, setSelectAvatarSelection] = useState(false);
+
+  const [isExpanded, setExpand] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -102,7 +105,7 @@ const Profile = () => {
     socialShare(
       AppEnvironment.MainLogo,
       '🚀 Level Up Your Dating Game with caveXpert! 🚀',
-      'Guys, are you ready to level up your dating game? 💪 "caveXpert" is here to help you understand yourself better, learn what it takes to attract the woman of your dreams, and build real, lasting relationships. Dive into quizzes, read insightful stories, and become a top learner on our leaderboard! 🏆  \n\n 📲 Download the app now, start your journey, and show her that you are ready for what comes next. 😉🔥 \n\n Download caveXpert & Start Your Journey!',
+      'Guys, are you ready to level up your dating game? 💪 "caveXpert" is here to help you understand yourself better, learn what it takes to attract the woman of your dreams, and build real, lasting relationships. Dive into quizzes, read insightful stories, and become a top learner on our leaderboard! 🏆  \n\n📲 Download the app now, start your journey, and show her that you are ready for what comes next. 😉🔥 \n\n Download caveXpert & Start Your Journey!',
       AppEnvironment.StoreLink
     );
   };
@@ -116,8 +119,32 @@ const Profile = () => {
     }
   };
 
-  const knowMore = () => {
+  const openPage = async (page:any) => {
     // Function to handle "Know More" action
+    const knowMoreURL = AppEnvironment.BaseUrl + page || '';
+    loggerService('bannerURL', knowMore.name, knowMoreURL);
+
+    if (knowMoreURL) {
+      try {
+        await Linking.openURL(knowMoreURL);
+      } catch (error) {
+        Alert.alert('Error', 'Unable to open the link.');
+      }
+    }
+  }
+
+  const knowMore = async () => {
+    // Function to handle "Know More" action
+    const knowMoreURL = AppEnvironment.BaseUrl + 'about' || '';
+    loggerService('bannerURL', knowMore.name, knowMoreURL);
+
+    if (knowMoreURL) {
+      try {
+        await Linking.openURL(knowMoreURL);
+      } catch (error) {
+        Alert.alert('Error', 'Unable to open the link.');
+      }
+    }
   };
 
   const editProfile = () => {
@@ -161,6 +188,15 @@ const Profile = () => {
       setUserData(response1.userinfo);
     });
   }
+
+  const toggleQuestion = () => {
+    if (isExpanded) {
+      setExpand(false);
+    } else {
+      setExpand(true);
+    }
+
+  };
 
   const selectUserIcon = async (usericon: any) => {
     let userId = await AsyncStorage.getItem('UserId');
@@ -301,18 +337,70 @@ const Profile = () => {
                 </View>
               </View>
 
-              <View>
-                <TouchableOpacity onPress={knowMore}>
-                  <View style={[globalStyles.flex, globalStyles.mTop10, globalStyles.generalList]}>
-                    <Text style={[globalStyles.themeTextColor]}>Know More About Us</Text>
-                    <Icon
-                      source="chevron-right"
-                      color={GlobalColors.colors.white}
-                      size={20}
-                    />
+              <View style={ styles.questionContainer}>
+                <TouchableOpacity onPress={() => toggleQuestion()} >
+                  <View style={[globalStyles.flex, globalStyles.mTop10]}>
+                    <Text style={[globalStyles.themeTextColor, styles.questionHeader,globalStyles.mBottom10]}>Know More About caveXpert</Text>
                   </View>
                 </TouchableOpacity>
-                <Divider />
+              {
+                isExpanded && (
+                  <View style={[globalStyles.mBottom10,globalStyles.mTop10]}>
+                    <View>
+                      <TouchableOpacity onPress={()=>openPage('about')}>
+                        <View style={[globalStyles.flex, globalStyles.mTop10, globalStyles.generalList]}>
+                          <Text style={[globalStyles.themeTextColor]}>About Us</Text>
+                          <Icon
+                            source="chevron-right"
+                            color={GlobalColors.colors.white}
+                            size={20}
+                          />
+                        </View>
+                      </TouchableOpacity>
+                      <Divider />
+                    </View>
+                    <View>
+                      <TouchableOpacity onPress={()=>openPage('privacy')}>
+                        <View style={[globalStyles.flex, globalStyles.mTop10, globalStyles.generalList]}>
+                          <Text style={[globalStyles.themeTextColor]}>Privacy Policy</Text>
+                          <Icon
+                            source="chevron-right"
+                            color={GlobalColors.colors.white}
+                            size={20}
+                          />
+                        </View>
+                      </TouchableOpacity>
+                      <Divider />
+                    </View>
+                    <View>
+                      <TouchableOpacity onPress={()=>openPage('terms')}>
+                        <View style={[globalStyles.flex, globalStyles.mTop10, globalStyles.generalList]}>
+                          <Text style={[globalStyles.themeTextColor]}>Terms & Conditions</Text>
+                          <Icon
+                            source="chevron-right"
+                            color={GlobalColors.colors.white}
+                            size={20}
+                          />
+                        </View>
+                      </TouchableOpacity>
+                      <Divider />
+                    </View>
+                    <View>
+                      <TouchableOpacity onPress={()=>openPage('disclaimer')}>
+                        <View style={[globalStyles.flex, globalStyles.mTop10, globalStyles.generalList]}>
+                          <Text style={[globalStyles.themeTextColor]}>Disclaimer</Text>
+                          <Icon
+                            source="chevron-right"
+                            color={GlobalColors.colors.white}
+                            size={20}
+                          />
+                        </View>
+                      </TouchableOpacity>
+                      <Divider />
+                    </View>
+                  </View>
+                )
+              }
               </View>
 
               <View>
@@ -362,6 +450,22 @@ const Profile = () => {
 export default Profile;
 
 const styles = StyleSheet.create({
+  expandedContent: {
+    marginTop: 20,
+  },
+  questionContainer: {
+    backgroundColor: '#1c1c1c', // Dark background for the accordion container
+    borderRadius: 3,
+    borderWidth: 0.2,
+    borderColor: GlobalColors.colors.white,
+    marginVertical: 8,
+    padding: 15,
+  },
+  questionHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
   viewCard: {
     flex: 0.2,
     flexDirection: 'row',

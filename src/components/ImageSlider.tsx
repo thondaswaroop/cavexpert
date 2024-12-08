@@ -1,8 +1,5 @@
-// src/components/ImageSlider.tsx
-
 import React, { useCallback } from 'react';
-import { Alert, Button, View, Dimensions, StyleSheet, Linking } from 'react-native';
-import { globalStyles } from '../Resources';
+import { Alert, View, Dimensions, StyleSheet, Linking } from 'react-native';
 import { ImageSlider } from 'react-native-image-slider-banner';
 import { loggerService } from '../utils/CommonUtils';
 import { AppEnvironment } from '../constants/Global';
@@ -21,30 +18,36 @@ interface ImageSlideAreaProps {
 }
 
 const ImageSlideArea: React.FC<ImageSlideAreaProps> = ({ images, isOffline, bannerData }) => {
-
   const displayImages = images.map(image => ({
     img: isOffline && image.localImagePath ? `file://${image.localImagePath}` : image.img,
   }));
 
   const clickImage = async (images: any, index: any) => {
     const bannerURL = bannerData[index]?.url || '';
-
     loggerService('bannerURL', clickImage.name, bannerURL);
 
     if (bannerURL) {
-      await Linking.openURL(bannerURL);
+      try {
+        await Linking.openURL(bannerURL);
+      } catch (error) {
+        Alert.alert('Error', 'Unable to open the link.');
+      }
     }
   };
 
   return (
-    <View>
+    <View style={styles.container}>
       <ImageSlider
-        data={displayImages.length > 0 ? displayImages : [{ img: AppEnvironment.BaseUrl+'images/logo.png' }]}
+        data={
+          displayImages.length > 0
+            ? displayImages
+            : [{ img: `${AppEnvironment.BaseUrl}images/logo.png` }]
+        }
         autoPlay={true}
         timer={4000}
         onClick={(images, index) => clickImage(images, index)}
         preview={false}
-        caroselImageStyle={[globalStyles.banners.image, styles.image]}
+        caroselImageStyle={styles.image} // Ensures proper display of images
         closeIconColor="#fff"
       />
     </View>
@@ -52,10 +55,14 @@ const ImageSlideArea: React.FC<ImageSlideAreaProps> = ({ images, isOffline, bann
 };
 
 const styles = StyleSheet.create({
+  container: {
+    width: screenWidth, // Matches the screen width
+    height: screenWidth * 0.7, // Adjust height as needed (60% of screen width)
+  },
   image: {
-    width: screenWidth * 0.95,
-    height: screenWidth * 1, // Adjust the height ratio according to your needs
-    resizeMode: 'contain', // Can change to 'cover' if you prefer.
+    width: screenWidth, // Matches the screen width
+    height: screenWidth * 0.7, // Matches container height
+    resizeMode: 'contain', // Ensures the full image fits without cutting
   },
 });
 
