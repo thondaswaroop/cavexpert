@@ -1,4 +1,4 @@
-package com.caveXpert
+package com.thecaveXpert
 
 import android.app.Application
 import com.facebook.react.PackageList
